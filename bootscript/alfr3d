@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# description: alfr3d init script
+#
+### BEGIN INIT INFO
+# Provides:          alfr3d
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: alfr3d daemon
+# Description:       alfr3d daemon
+# Start the service alfr3d
+### END INIT INFO
+
+INITSAY="all alfred services have been initialized"
+ENDSAY="Stopping all alfred services"
+
+start() {
+    echo "Starting alfr3d services: "
+    ### Create the lock file ###
+    touch /var/lock/alfr3d
+    echo
+    
+    ### Mount Samba share ###
+    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/
+    ### Start the daemon ###
+    python /home/alfr3d/alfr3ddaemon.py start > /home/alfr3d/log/init.log
+    ### Start Node.js server ###
+    node /home/alfr3d/alfr3d.js/alfr3dServer.js > /home/alfr3d/log/init.log 
+
+    sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
+}
+# Restart the service alfr3d
+stop() {
+    echo "Stopping alfr3d services: "
+    sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
+    #killproc alfr3d    
+    python /home/alfr3d/alfr3ddaemon.py stop
+    umount /home/alfr3d/audio
+    ### Now, delete the lock file ###
+    rm -f /var/lock/alfr3d
+    echo
+}
+### main logic ###
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status alfr3d
+        ;;
+  restart|reload|condrestart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+esac
+exit 0
+

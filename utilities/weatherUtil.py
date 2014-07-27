@@ -316,8 +316,3 @@ def getValue(value="currentTemperature"):
 		return forecastTodayText
 	if(str(value)== "currentTemperature	"):
 		return currentTemperature	
-
-
-# Main 
-if __name__ == '__main__':
-

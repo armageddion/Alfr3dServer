@@ -21,13 +21,18 @@ start() {
     ### Create the lock file ###
     touch /var/lock/alfr3d
     echo
-    
+
     ### Mount Samba share ###
+    echo "mounting aduio shares"
     sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/
+
     ### Start the daemon ###
+    echo "starting alfr3d daemon"
     python /home/alfr3d/alfr3ddaemon.py start > /home/alfr3d/log/init.log
+
     ### Start Node.js server ###
-    node /home/alfr3d/alfr3d.js/alfr3dServer.js > /home/alfr3d/log/init.log 
+    echo "starting node server"
+    node /home/alfr3d/alfr3d.js/alfr3dServer.js &> /home/alfr3d/log/init.log 
 
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
 }

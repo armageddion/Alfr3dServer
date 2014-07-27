@@ -3,22 +3,48 @@
 """
 This file is used for all weather related functions.
 """
+# Copyright (c) 2010-2014 LiTtl3.1 Industries (LiTtl3.1).
+# All rights reserved.
+# This source code and any compilation or derivative thereof is the
+# proprietary information of LiTtl3.1 Industries and is
+# confidential in nature.
+# Use of this source code is subject to the terms of the applicable
+# LiTtl3.1 Industries license agreement.
+#
+# Under no circumstances is this component (or portion thereof) to be in any
+# way affected or brought under the terms of any Open Source License without
+# the prior express written permission of LiTtl3.1 Industries.
+#
+# For the purpose of this clause, the term Open Source Software/Component
+# includes:
+#
+# (i) any software/component that requires as a condition of use, modification
+#     and/or distribution of such software/component, that such software/
+#     component:
+#     a. be disclosed or distributed in source code form;
+#     b. be licensed for the purpose of making derivative works; and/or
+#     c. can be redistributed only free of enforceable intellectual property
+#        rights (e.g. patents); and/or
+# (ii) any software/component that contains, is derived in any manner (in whole
+#      or in part) from, or statically or dynamically links against any
+#      software/component specified under (i).
+#
 
 from time import gmtime, strftime, localtime		# needed to obtain time
 import xml.etree.ElementTree as ET					# xml library
 import os											# used to allow execution of system level commands
+from speak import speakString
 
 # DEBUG time var.
 time=strftime("%A, %d %B %Y %H:%M:%S ", localtime())
-print time
 
 # Time variables
 hour=strftime("%I", localtime())
 minute=strftime("%M", localtime())
 ampm=strftime("%p",localtime())
 
-logfile = '/home/alfr3d/log/weatherUtil.log'
-weatherData = '/home/alfr3d/weatherData.txt'
+logfile = '../log/weatherUtil.log'
+weatherData = '../weatherData.txt'
 f = open(logfile, 'a')
 w = open(weatherData, 'w')	
 
@@ -47,11 +73,10 @@ def getWeather():
 	global forecastTodayHigh
 	global forecastTodayText
 	global currentTemperature
-	
 
 	# get weather update; 4118=Toronto; 2471217=Philadelphia
 	try:
-		os.system('echo `curl "http://weather.yahooapis.com/forecastrss?w=2471217&u=c"` > /home/alfr3d/weatherData.xml')
+		os.system('echo `curl "http://weather.yahooapis.com/forecastrss?w=2471217&u=c"` > weatherData.xml')
 	except:
 		f.write(strftime("%H:%M:%S: ")+"Failed to get weather data\n")	
 		return False
@@ -166,6 +191,10 @@ def getWeather():
 	return True
 
 def speakWeather():
+	"""
+		Description:
+			Speak weather out loud
+	"""	
 
 	f.write(strftime("%A, %d %B %Y %H:%M:%S ", localtime()))
 	f.write("\n")
@@ -180,102 +209,118 @@ def speakWeather():
 		return False
 
 	if(cold==False and damp==False and windy==False and Sunny==True):
-		os.system('/home/alfr3d/tts.sh "Weather today is just gorgeous!"')
+		speakString("Weather today is just gorgeous!")
 	elif(cold):
 		if (veryCold):
 			if(damp):
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold, damp and very windy"')
+					speakString("Weather conditions are very cold, damp and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold, damp and windy"')
+					speakString("Weather conditions are very cold, damp and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold and damp"')
+					speakString("Weather conditions are very cold and damp")
 			else:
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold and very windy"')
+					speakString("Weather conditions are very cold and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold and windy"')
+					speakString("Weather conditions are very cold and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very cold, but otherwise nice!"')
+					speakString("Weather conditions are very cold, but otherwise nice!")
 		else:
 			if(damp):
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold, damp and very windy"')
+					speakString("Weather conditions are cold, damp and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold, damp and windy"')
+					speakString("Weather conditions are cold, damp and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold and damp"')
+					speakString("Weather conditions are cold and damp")
 			else:
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold and very windy"')
+					speakString("Weather conditions are cold and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold and windy"')
+					speakString("Weather conditions are cold and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are cold, but otherwise nice!"')
+					speakString("Weather conditions are cold, but otherwise nice!")
 	elif(hot):
 		if (veryHot):
 			if(damp):
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot, damp and very windy"')
+					speakString("Weather conditions are very hot, damp and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot, damp and windy"')
+					speakString("Weather conditions are very hot, damp and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot and damp"')
+					speakString("Weather conditions are very hot and damp")
 			else:
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot and very windy"')
+					speakString("Weather conditions are very hot and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot and windy"')
+					speakString("Weather conditions are very hot and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are very hot, but otherwise nice!"')
+					speakString("Weather conditions are very hot, but otherwise nice!")
 		else:
 			if(damp):
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot, damp and very windy"')
+					speakString("Weather conditions are hot, damp and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot, damp and windy"')
+					speakString("Weather conditions are hot, damp and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot and windy"')
+					speakString("Weather conditions are hot and windy")
 			else:
 				if(veryWindy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot and very windy"')
+					speakString("Weather conditions are hot and very windy")
 				elif(windy):
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot and windy"')
+					speakString("Weather conditions are hot and windy")
 				else:
-					os.system('/home/alfr3d/tts.sh "Weather conditions are hot, but otherwise nice!"')
+					speakString("Weather conditions are hot, but otherwise nice!")
 	elif(damp):
 		if(veryWindy):
-			os.system('/home/alfr3d/tts.sh "Weather conditions are damp and very windy"')
+			speakString("Weather conditions are damp and very windy")
 		elif(windy):
-			os.system('/home/alfr3d/tts.sh "Weather conditions are damp and windy"')
+			speakString("Weather conditions are damp and windy")
 		else:
-			os.system('/home/alfr3d/tts.sh "Weather conditions are damp"')
+			speakString("Weather conditions are damp")
 	elif(windy):
 		if (veryWindy):
-			os.system('/home/alfr3d/tts.sh "Weather conditions are very windy"')
+			speakString("Weather conditions are very windy")
 		else:
-			os.system('/home/alfr3d/tts.sh "Weather conditions are windy"')
+			speakString("Weather conditions are windy")
 
 	# Decide what to do with the data depending on the time of day
 	if (ampm=="AM" and int(hour)<10):
 
-		os.system('/home/alfr3d/tts.sh "Today\'s high is expected to be '+forecastTodayHigh+' degrees"')
-		os.system('/home/alfr3d/tts.sh "Meteorology wizards are predicting '+forecastTodayText+' with wind around '+windSpeed+' kilometers per hour"')
+		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
+		speakString("Meteorology wizards are predicting "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
 	
 	else:
-		os.system('/home/alfr3d/tts.sh "Current temperature in '+locationCity+' is '+currentTemperature+' degrees"')
+		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		if (windy):
-			os.system('/home/alfr3d/tts.sh "Meteorology wizards are arguing that it is '+forecastTodayText+' with wind around '+windSpeed+' kilometers per hour"')
+			speakString("Meteorology wizards are arguing that it is "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
 		else:			
-			os.system('/home/alfr3d/tts.sh "Meteorology wizards say that it is '+forecastTodayText+'"')
+			speakString("Meteorology wizards say that it is "+forecastTodayText)
 
 	return True
 
 def getSubjectiveWeather():
+	"""
+		Description:
+			This Function returns subjective weather measurements
+		Returns:
+			Touple consisting of subjective info:
+			[cold,hot,veryCold,veryHot,damp,windy,veryWindy,sunny]
+	"""
 	getWeather()
 	return [cold,hot,veryCold,veryHot,damp,windy,veryWindy,sunny]
 
 def getValue(value="currentTemperature"):
+	"""
+		Description:
+			Get a specific measurement
+		Arguments:
+			Requested measurement
+		Returns:
+			Returns the value of the requested measurement
+	"""
+
 	f.write(strftime("%H:%M:%S: ")+"Getting weather data...\n")
 	ret = getWeather()								# Get the data and parse it
 	if ret:

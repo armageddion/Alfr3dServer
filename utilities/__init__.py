@@ -9,4 +9,5 @@
 
 from arduinoUtil import *
 from weatherUtil import *
+from speak import *
 

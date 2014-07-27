@@ -1,0 +1,16 @@
+01:45:30: City:Philadelphia
+Windchill:26,VeryCold:False
+Wind Direction:190
+Wind Speed:14.48,Windy:True,Very Windy:False
+Atmospheric Pressure:1012.7
+Humidity:66,Damp:True
+Atmospheric Pressure Rising:1
+Sunrise:5:50 am
+Sunset:8:19 pm
+Day of the week:Sat
+Date:26 Jul 2014
+Today's Low:22
+Today's High:29
+Description:Mostly Cloudy
+Current Conditions:Partly Cloudy
+Current Temperature:26,Cold:False

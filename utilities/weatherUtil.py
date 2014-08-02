@@ -34,9 +34,7 @@ from time import gmtime, strftime, localtime		# needed to obtain time
 import xml.etree.ElementTree as ET					# xml library
 import os											# used to allow execution of system level commands
 from speak import speakString
-
-# DEBUG time var.
-time=strftime("%A, %d %B %Y %H:%M:%S ", localtime())
+import ConfigParser
 
 # Time variables
 hour=strftime("%I", localtime())
@@ -187,6 +185,17 @@ def getWeather():
 	w.write("Description:"+str(forecastTodayText)+"\n")
 	w.write("Current Conditions:"+str(conditionsText)+"\n")
 	w.write("Current Temperature:"+str(currentTemperature)+",Cold:"+str(cold)+"\n")		
+
+	config = ConfigParser.RawConfigParser()
+	config.read('../config/weatherTypes.conf')
+
+	try:
+		config.add_section(conditionsText)
+		with open('../config/weatherTypes.conf', 'wb') as configfile:
+			config.write(configfile)
+	except ConfigParser.DuplicateSectionError:
+		f.write(strftime("%H:%M:%S: ")+"Weather type already exists\n")
+
 
 	return True
 

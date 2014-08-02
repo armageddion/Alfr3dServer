@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-	This is a "hello_world" app for basic arduino testing
+	This function speaks weather data/forcast
 """
 # Copyright (c) 2010-2014 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
@@ -32,42 +32,8 @@
 
 import sys
 import os
-import time
 
 sys.path.append("..")
 import utilities
 
-def handleArguments():
-	"""
-        Description:
-            This function handles the arguments if any.         
-        Return:
-            True if there is an argument
-            False if there isnt one
-    """
-
-	if(len(sys.argv)>1):
-		return True
-	else:
-		print "Nothing to send..."
-		return False
-
-def sendToArduino(dataToSend):
-	"""
-    	Description:
-		This function sends a string to Arduino
-	"""	
-	time.sleep(5)
-	arduino.write(dataToSend+"\n")
-
-
-# Main
-if __name__ == '__main__':
-
-	arduino = utilities.Arduino()
-	arduino.connect()
-
-	# handle arguments
-	if handleArguments():
-		for i in range(len(sys.argv)-1):
-			sendToArduino(sys.argv[i+1])
+utilities.speakWeather()

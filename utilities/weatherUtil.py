@@ -187,11 +187,12 @@ def getWeather():
 	w.write("Current Temperature:"+str(currentTemperature)+",Cold:"+str(cold)+"\n")		
 
 	config = ConfigParser.RawConfigParser()
-	config.read('../config/weatherTypes.conf')
+	#config.read('../config/weatherTypes.conf')
+	config.read('../config/alfr3ddaemon.conf')
 
 	try:
 		config.add_section(conditionsText)
-		with open('../config/weatherTypes.conf', 'wb') as configfile:
+		with open('../config/alfr3ddaemon.conf', 'wb') as configfile:
 			config.write(configfile)
 	except ConfigParser.DuplicateSectionError:
 		f.write(strftime("%H:%M:%S: ")+"Weather type already exists\n")
@@ -303,6 +304,42 @@ def speakWeather():
 	else:
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		if (windy):
+			speakString("Meteorology wizards are arguing that it is "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+		else:			
+			speakString("Meteorology wizards say that it is "+forecastTodayText)
+
+	return True
+
+def speakWeather_short():
+	"""
+		Description:
+			Speak weather out loud
+	"""	
+
+	f.write(strftime("%A, %d %B %Y %H:%M:%S ", localtime()))
+	f.write("\n")
+
+	global hour
+	f.write(strftime("%H:%M:%S: ")+"Getting weather data...\n")
+	ret = getWeather()								# Get the data and parse it
+	if ret:
+		f.write(strftime("%H:%M:%S: ")+"Got and parsed all weather data\n")
+	else:
+		f.write(strftime("%H:%M:%S: ")+"Failed to get weather data\n")
+		return False
+
+	if(veryWindy==False and Sunny==True):
+		speakString("Weather today is just gorgeous!")
+
+	# Decide what to do with the data depending on the time of day
+	if (ampm=="AM" and int(hour)<10):
+		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
+		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
+		speakString("Meteorology wizards are predicting "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+	
+	else:
+		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
+		if (veryWindy):
 			speakString("Meteorology wizards are arguing that it is "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
 		else:			
 			speakString("Meteorology wizards say that it is "+forecastTodayText)

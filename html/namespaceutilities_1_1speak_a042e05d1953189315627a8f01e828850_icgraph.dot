@@ -1,0 +1,17 @@
+digraph "utilities.speak.speakString"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="utilities.speak.speakString",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="utilities.speak.speakGreeting",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespaceutilities_1_1speak.html#ac3682efcea60c72fff2485edf7658e3e"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="utilities.speak.speakRandom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespaceutilities_1_1speak.html#a189006bcadd491fdc0e6a2d77849091d"];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="utilities.speak.speakTime",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespaceutilities_1_1speak.html#ac4d5e22bd69ce2d4ab612a29d1f65685"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="utilities.weatherUtil.speak\lWeather",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespaceutilities_1_1weatherUtil.html#a56139310722e41bbe3dc7b40ec1df87e"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="utilities.weatherUtil.speak\lWeather_short",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespaceutilities_1_1weatherUtil.html#a11cd2ff52c058bfcf746b86d6ee8cb30"];
+}

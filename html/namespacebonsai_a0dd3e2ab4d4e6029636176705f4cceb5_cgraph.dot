@@ -1,0 +1,14 @@
+digraph "bonsai.bonsai"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="bonsai.bonsai",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="bonsai.checkHumidity",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespacebonsai.html#a050126bbe9c0f35a602b91bdb226faa9"];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="bonsai.waterBonsai",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespacebonsai.html#ae1f9bd97f2508bef5fd89ccaaf082102"];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="bonsai.handleArguments",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$namespacebonsai.html#a300af3d7b82885b194c23cbe8516883c"];
+  Node4 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

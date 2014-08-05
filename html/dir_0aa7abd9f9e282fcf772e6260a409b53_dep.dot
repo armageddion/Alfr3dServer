@@ -1,0 +1,6 @@
+digraph "alfr3d.js" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  dir_0aa7abd9f9e282fcf772e6260a409b53 [shape=box, label="alfr3d.js", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_0aa7abd9f9e282fcf772e6260a409b53.html"];
+}

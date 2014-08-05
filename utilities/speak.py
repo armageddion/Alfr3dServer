@@ -109,7 +109,7 @@ def speakTime():
 	if (int(minute) == 0):
 		greeting += "It is " + str(int(hour)) + ". "
 	else:
-		greeting += "It is"  + str(int(hour)) + " " + str(int(minute)) + ". "
+		greeting += "It is "  + str(int(hour)) + " " + str(int(minute)) + ". "
 
 	speakString(greeting)
 

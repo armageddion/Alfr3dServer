@@ -36,4 +36,5 @@ import os
 sys.path.append("..")
 import utilities
 
-utilities.speakWeather()
+utilities.speakGreeting()
+utilities.speakTime()

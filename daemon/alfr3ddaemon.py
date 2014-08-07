@@ -33,8 +33,8 @@ os.system('sudo chown alfr3d:alfr3d /var/run/alfr3ddaemon')
 
 config = ConfigParser.RawConfigParser()
 
-ishome_old = [True, starttime]
-ishome_new = [True, starttime]
+ishome_old = False
+ishome_new = False
 last_home = starttime
 print last_home
 
@@ -80,23 +80,27 @@ class App():
             # b4:18:d1:62:2e:24     # armageddion iPhone
             # 88:f7:c7:30:5d:61     # dummy test MAC
             if(os.system("sudo arp-scan --localnet | grep -i -c b4:18:d1:62:2e:24")):
-                ishome_new[0] = False
+                ishome_new = False
             else:
-                ishome_new[0] = True
+                ishome_new = True
 
             print "last home ", last_home
+            print "time since home", time.time()-last_home
+            print "ishome_new ", ishome_new
+            print "ishome_old ", ishome_old
 
-            if((ishome_new[0] != ishome_old[0])):
-                ishome_new[1] = time.time()
-                if(ishome_new[0] and  (ishome_new[1]-last_home > 60*15)):
-                    logger.info("Looks like you came home")
-                    logger.info("starting greeting on another thread")
-                    welcome = Thread(target=self.welcomeHome)
-                    try:
-                        welcome.start()
-                        last_home = time.time()
-                    except:
-                        logger.error("Failed to start thread")
+            if((ishome_new != ishome_old)):
+                if ishome_new:
+                    if((time.time()-last_home > 60*30)):
+                        logger.info("Looks like you came home")
+                        logger.info("starting greeting on another thread")
+                        welcome = Thread(target=self.welcomeHome)
+                        try:
+                            welcome.start()
+                            last_home = time.time()
+                        except:
+                            logger.error("Failed to start thread")
+                    last_home = time.time() 
                 else:
                     logger.info("Looks like you just left... good bye")
                             
@@ -142,9 +146,8 @@ class App():
                     logger.info("starttime and randint have been reset")
                     logger.info("next quip will be shouted in "+str(waittime_music)+" minutes.")            
 
-
-            time.sleep(10)
-
+            #time.sleep(10)
+            
     def welcomeHome(self):
         """
             Description:

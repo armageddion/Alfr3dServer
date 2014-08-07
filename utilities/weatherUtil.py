@@ -34,6 +34,7 @@ from time import gmtime, strftime, localtime		# needed to obtain time
 import xml.etree.ElementTree as ET					# xml library
 import os											# used to allow execution of system level commands
 from speak import speakString
+from random import randint
 import ConfigParser
 
 # Time variables
@@ -41,10 +42,10 @@ hour=strftime("%I", localtime())
 minute=strftime("%M", localtime())
 ampm=strftime("%p",localtime())
 
-logfile = '../log/weatherUtil.log'
-weatherData = '../weatherData.txt'
+logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/weatherUtil.log")
+weatherData = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/weatherData.txt")
 f = open(logfile, 'a')
-w = open(weatherData, 'w')	
+w = open(weatherData, 'w')
 
 def getWeather():
 	"""
@@ -188,11 +189,11 @@ def getWeather():
 
 	config = ConfigParser.RawConfigParser()
 	#config.read('../config/weatherTypes.conf')
-	config.read('../config/alfr3ddaemon.conf')
+	config.read(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../config/alfr3ddaemon.conf'))
 
 	try:
 		config.add_section(conditionsText)
-		with open('../config/alfr3ddaemon.conf', 'wb') as configfile:
+		with open((os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../config/alfr3ddaemon.conf')), 'wb') as configfile:
 			config.write(configfile)
 	except ConfigParser.DuplicateSectionError:
 		f.write(strftime("%H:%M:%S: ")+"Weather type already exists\n")
@@ -218,7 +219,7 @@ def speakWeather():
 		f.write(strftime("%H:%M:%S: ")+"Failed to get weather data\n")
 		return False
 
-	if(cold==False and damp==False and windy==False and Sunny==True):
+	if(cold==False and damp==False and windy==False and sunny==True):
 		speakString("Weather today is just gorgeous!")
 	elif(cold):
 		if (veryCold):
@@ -319,6 +320,10 @@ def speakWeather_short():
 	f.write(strftime("%A, %d %B %Y %H:%M:%S ", localtime()))
 	f.write("\n")
 
+	greeting = ''
+	random = ["Wather patterns ", "My scans "]
+	greeting  += random[randint(0,len(random)-1)]	
+
 	global hour
 	f.write(strftime("%H:%M:%S: ")+"Getting weather data...\n")
 	ret = getWeather()								# Get the data and parse it
@@ -328,21 +333,21 @@ def speakWeather_short():
 		f.write(strftime("%H:%M:%S: ")+"Failed to get weather data\n")
 		return False
 
-	if(veryWindy==False and Sunny==True):
+	if(veryWindy==False and sunny==True):
 		speakString("Weather today is just gorgeous!")
 
 	# Decide what to do with the data depending on the time of day
 	if (ampm=="AM" and int(hour)<10):
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
-		speakString("Meteorology wizards are predicting "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+		speakString(greeting + " indicate that it will be a "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
 	
 	else:
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		if (veryWindy):
-			speakString("Meteorology wizards are arguing that it is "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+			speakString(greeting + " indicate that it is a "+conditionsText+" day with wind around "+windSpeed+" kilometers per hour")
 		else:			
-			speakString("Meteorology wizards say that it is "+forecastTodayText)
+			speakString(greeting + " indicate that it is a "+conditionsText+" day")
 
 	return True
 
@@ -354,7 +359,10 @@ def getSubjectiveWeather():
 			Touple consisting of subjective info:
 			[cold,hot,veryCold,veryHot,damp,windy,veryWindy,sunny]
 	"""
+
+	f.write(strftime("%H:%M:%S: ")+"getting subjective weather...\n")
 	getWeather()
+
 	return [cold,hot,veryCold,veryHot,damp,windy,veryWindy,sunny]
 
 def getValue(value="currentTemperature"):

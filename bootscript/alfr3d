@@ -15,6 +15,7 @@
 
 INITSAY="all alfred services have been initialized"
 ENDSAY="Stopping all alfred services"
+HOMEDIR=/home/alfr3d/Alfr3d-MKIII
 
 start() {
     echo "Starting alfr3d services: "
@@ -28,11 +29,11 @@ start() {
 
     ### Start the daemon ###
     echo "starting alfr3d daemon"
-    python /home/alfr3d/alfr3ddaemon.py start > /home/alfr3d/log/init.log
+    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log
 
     ### Start Node.js server ###
     echo "starting node server"
-    node /home/alfr3d/alfr3d.js/alfr3dServer.js &> /home/alfr3d/log/init.log 
+    node $HOMEDIR/alfr3d.js/alfr3dServer.js > $HOMEDIR/log/init.log &
 
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
 }
@@ -41,7 +42,7 @@ stop() {
     echo "Stopping alfr3d services: "
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
     #killproc alfr3d    
-    python /home/alfr3d/alfr3ddaemon.py stop
+    python $HOMEDIR/daemon/alfr3ddaemon.py stop
     umount /home/alfr3d/audio
     ### Now, delete the lock file ###
     rm -f /var/lock/alfr3d

@@ -35,7 +35,7 @@ import sys
 import os
 from time import strftime
 
-logfile = '../log/arduinoUtil.log'
+logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/arduinoUtil.log")
 log = open(logfile, 'a')
 
 class Arduino:

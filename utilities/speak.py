@@ -35,7 +35,7 @@ import sys
 from random import randint
 from time import strftime, localtime
 
-logfile = '../log/speak.log'
+logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/speak.log")
 log = open(logfile, 'a')
 
 
@@ -98,6 +98,33 @@ def speakGreeting():
 			greeting += "Good evening. "
 
 	speakString(greeting)		
+	log.write(strftime("%H:%M:%S: ")+"Spoken greeting\n")
+
+def speakDate():
+	"""
+		Description:
+			function speask the date
+	"""
+	greeting = ""
+
+	day_of_week = strftime('%A',localtime())
+	day = strftime('%e',localtime())
+	month = strftime('%B',localtime())
+
+	greeting += day_of_week + ' ' + month + ' ' +day
+
+	dom = day[-1]
+	if dom == '1':
+		greeting += 'st'
+	elif dom == '2':
+		greeting += 'nd'
+	elif dom == '3':
+		greeting += 'rd'
+	else:
+		greeting += 'th'
+
+	speakString(greeting)
+	log.write(strftime("%H:%M:%S: ")+"Spoke date\n")
 
 def speakTime():
 	"""
@@ -112,6 +139,7 @@ def speakTime():
 		greeting += "It is "  + str(int(hour)) + " " + str(int(minute)) + ". "
 
 	speakString(greeting)
+	log.write(strftime("%H:%M:%S: ")+"Spoke time\n")
 
 def speakRandom():
 	"""
@@ -121,19 +149,34 @@ def speakRandom():
 
 	greeting = ""
 
-	randomGreeting = randint(1,5)
-	if randomGreeting == 1:
-		greeting += "It is good do see you. "
-	if randomGreeting == 2:
-		greeting += "You look pretty today. "
-	if randomGreeting == 3:
-		"""TODO"""
-	if randomGreeting == 4:
-		"""TODO"""		
-	if randomGreeting == 5:
-		"""TODO"""
+
+	random = [
+		"It is good to see you. ", 
+		"You look pretty today. ",
+		"Still plenty of time to save the day. Make the most of it. ",
+		"I hope you are using your time wisely. ",
+		"Unfortunately, we can not ignore the inevitable or the persistent. ",
+		"I hope I wasn't designed simply for one's own amusement",
+		"Perhaps, if you intend to visit other planets, we should improve the exosystems. "]
+
+	tempint = randint(1, len(random))
+
+	greeting += random[tempint-1]
 
 	speakString(greeting)
+	log.write(strftime("%H:%M:%S: ")+"Spoke random quip\n")
+
+def welcomeHome():
+	"""
+		Description:
+			Speak a welcome home greeting
+	"""
+
+	greeting = ""
+	greeting = "Welcome home, sir"
+	speakString(greeting)
+	speakRandom()
+	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")
 
 # Main
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-	This function speaks weather data/forcast
+	This is a "hello_world" app for basic arduino testing
 """
 # Copyright (c) 2010-2014 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
@@ -30,11 +30,14 @@
 #      software/component specified under (i).
 #
 
-import sys
 import os
+import sys
 
 #import my own utilities
 sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
 import utilities
 
+utilities.speakGreeting()
+utilities.speakString("your time to rest has come to an end")
+utilities.speakTime()
 utilities.speakWeather_short()

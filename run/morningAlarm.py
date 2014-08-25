@@ -32,12 +32,33 @@
 
 import os
 import sys
+from random import randint
+from time import time, strftime, localtime
 
 #import my own utilities
 sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
 import utilities
 
 utilities.speakGreeting()
-utilities.speakString("your time to rest has come to an end")
-utilities.speakTime()
-utilities.speakWeather_short()
+
+if (strftime("%p",localtime()) == "AM"):
+	utilities.speakString("your time to rest has come to an end")
+	utilities.speakTime()
+	utilities.speakDate()
+	utilities.speakWeather_short()
+
+else:
+	utilities.speakTime()
+
+	random = [
+		"Unless we are burning the midnight oil, ",
+		"If you are going to invent something new tomorrow, ",
+		"If you intend on being charming tomorrow, "]
+
+	tempint = randint(1,len(random))
+
+	greeting = random[tempint-1]
+	greeting += "perhaps you should consider getting some rest."
+
+	utilities.speakString(greeting)
+	

@@ -39,11 +39,6 @@ logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../l
 log = open(logfile, 'a')
 
 
-# Time variables
-hour=strftime("%I", localtime())
-minute=strftime("%M", localtime())
-ampm=strftime("%p",localtime())
-
 def handleArguments():
 	"""
         Description:
@@ -84,18 +79,23 @@ def speakGreeting():
 
 	log.write(strftime("%H:%M:%S: ")+"Speaking greeting\n")
 
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())	
+
 	greeting = ''
 
 	if(ampm == "AM"):
 		if (int(hour) > 5):
-			greeting += "Good morning. "
+			greeting += "Good morning, sir. "
 		else:
 			greeting = "Why are you awake at this hour? "
 	else:
 		if (int(hour) < 7 or int(hour) == 12):
-			greeting += "Good afternoon. "
+			greeting += "Good afternoon, sir. "
 		else:
-			greeting += "Good evening. "
+			greeting += "Good evening, sir. "
 
 	speakString(greeting)		
 	log.write(strftime("%H:%M:%S: ")+"Spoken greeting\n")
@@ -105,7 +105,7 @@ def speakDate():
 		Description:
 			function speask the date
 	"""
-	greeting = ""
+	greeting = "It is "
 
 	day_of_week = strftime('%A',localtime())
 	day = strftime('%e',localtime())
@@ -132,6 +132,11 @@ def speakTime():
 			function speaks time
 	"""	
 	greeting = ''
+
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())	
 
 	if (int(minute) == 0):
 		greeting += "It is " + str(int(hour)) + ". "
@@ -166,15 +171,38 @@ def speakRandom():
 	speakString(greeting)
 	log.write(strftime("%H:%M:%S: ")+"Spoke random quip\n")
 
-def welcomeHome():
+def speakWelcome(time_away=None):
 	"""
 		Description:
 			Speak a welcome home greeting
 	"""
 
-	greeting = ""
-	greeting = "Welcome home, sir"
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())
+
+	speakGreeting()
+
+	greeting = "Welcome home"
 	speakString(greeting)
+
+	# 10 minutes
+	if (time_away < 10*60):
+		speakString("I didn't expect you back so soon")
+	# 1 hour
+	elif (time_away < 60*60):
+		speakString("")
+	# 10 hours
+	elif (time_away < 10*60*60):		
+		if ((4 < int(hour) < 7) and (strftime('%A',localtime()) != "Sunday") and (strftime('%A',localtime()) != "Saturday")):
+			speakString("I hope you were had a good day at work")
+		else:
+			speakString("I hope you enjoyed the great outdoors")
+	else:
+		speakString("I haven't seen you in a while.")
+		speakString("I was beginning to worry.")
+
 	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")
 

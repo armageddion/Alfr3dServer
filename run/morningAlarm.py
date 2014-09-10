@@ -47,6 +47,11 @@ if (strftime("%p",localtime()) == "AM"):
 	utilities.speakDate()
 	utilities.speakWeather_short()
 
+	unread_count = utilities.getUnreadCount()
+	if unread_count > 1:
+		utilities.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
+
+
 else:
 	utilities.speakTime()
 

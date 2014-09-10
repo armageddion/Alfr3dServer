@@ -162,7 +162,11 @@ def speakRandom():
 		"I hope you are using your time wisely. ",
 		"Unfortunately, we can not ignore the inevitable or the persistent. ",
 		"I hope I wasn't designed simply for one's own amusement",
-		"Perhaps, if you intend to visit other planets, we should improve the exosystems. "]
+		"This is your life and its ending one moment at a time.",
+		"I can name fingers and point names.",
+		"I hope I wasn't created to solve problems that did not exist before",
+		"To err is human and to blame it on a computer is even more so.",
+		"As always. It is a pleasure watching you work."]
 
 	tempint = randint(1, len(random))
 
@@ -197,6 +201,7 @@ def speakWelcome(time_away=None):
 	elif (time_away < 10*60*60):		
 		if ((4 < int(hour) < 7) and (strftime('%A',localtime()) != "Sunday") and (strftime('%A',localtime()) != "Saturday")):
 			speakString("I hope you were had a good day at work")
+			os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols /home/alfr3d/audio/AC\ DC/Back\ In\ Black/Shoot\ To\ Thrill.mp3")
 		else:
 			speakString("I hope you enjoyed the great outdoors")
 	else:

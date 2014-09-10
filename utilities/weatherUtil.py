@@ -300,14 +300,14 @@ def speakWeather():
 	if (ampm=="AM" and int(hour)<10):
 
 		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
-		speakString("Meteorology wizards are predicting "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+		speakString("Meteorology wizards are predicting "+forecastTodayText+" day with wind around "+windSpeed+" kilometers per hour")
 	
 	else:
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		if (windy):
-			speakString("Meteorology wizards are arguing that it is "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+			speakString("Meteorology wizards are arguing that it is a "+forecastTodayText+" day with wind around "+windSpeed+" kilometers per hour")
 		else:			
-			speakString("Meteorology wizards say that it is "+forecastTodayText)
+			speakString("Meteorology wizards say that it is a "+forecastTodayText+" day")
 
 	return True
 
@@ -340,7 +340,7 @@ def speakWeather_short():
 	if (ampm=="AM" and int(hour)<10):
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
 		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
-		speakString(greeting + " indicate that it will be a "+forecastTodayText+" with wind around "+windSpeed+" kilometers per hour")
+		speakString(greeting + " indicate that it will be a "+forecastTodayText+"day with wind around "+windSpeed+" kilometers per hour")
 	
 	else:
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")

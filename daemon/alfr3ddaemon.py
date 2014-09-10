@@ -125,14 +125,9 @@ class App():
             else:
                 ishome_new = True
 
-            # print "last home ", last_home
-            # print "time since home", time.time()-last_home
-            # print "ishome_new ", ishome_new
-            # print "ishome_old ", ishome_old
-
             if((ishome_new != ishome_old)):
                 if ishome_new:
-                    if((time.time()-last_home > 60*10)):
+                    if((time.time()-last_home > 60*60)):
                         logger.info("Looks like you came home")
                         ishome = True
                         logger.info("starting greeting on another thread")
@@ -145,7 +140,7 @@ class App():
                     last_home = time.time() 
                 else:
                     logger.info("Looks like you just left... good bye")
-                    if((time.time()-last_home > 60*10)):
+                    if((time.time()-last_home > 60*60)):
                         ishome = False
                             
             ishome_old = ishome_new
@@ -155,21 +150,21 @@ class App():
             block to play songs once in a while
             """ 
 
-            if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
-                if(time.time()-starttime>(waittime_music*60)):
-                    logger.info("time to play you a song")
-                    play = Thread(target=self.playTune)
-                    logger.info("starting tune on another thread")
-                    try:
-                        play.start()
-                    except:
-                        logger.error("Failed to start thread")
+            # if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
+            #     if(time.time()-starttime>(waittime_music*60)):
+            #         logger.info("time to play you a song")
+            #         play = Thread(target=self.playTune)
+            #         logger.info("starting tune on another thread")
+            #         try:
+            #             play.start()
+            #         except:
+            #             logger.error("Failed to start thread")
 
-                    starttime = time.time()
-                    waittime_music = random.randint(10,50)
-                    print "waittime: ", waittime_music
-                    logger.info("starttime and randint have been reset")
-                    logger.info("next song will be played in "+str(waittime_music)+" minutes.")
+            #         starttime = time.time()
+            #         waittime_music = random.randint(10,50)
+            #         print "waittime: ", waittime_music
+            #         logger.info("starttime and randint have been reset")
+            #         logger.info("next song will be played in "+str(waittime_music)+" minutes.")
 
 
             """
@@ -178,7 +173,7 @@ class App():
             if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
                 if(time.time()-starttime>(waittime_quip*60)):
                     logger.info("time to be a smart ass ")
-                    qiup = Thread(target=self.beSmart)
+                    quip = Thread(target=self.beSmart)
                     logger.info("being smartass on another thread")
                     try:
                         quip.start()
@@ -195,7 +190,7 @@ class App():
             """
                 Block to check unread emails (gMail)
             """
-            if ishome:
+            if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
                 email = Thread(target=self.checkGmail)
                 logger.info("checking Gmail on another thread")
                 try:
@@ -204,6 +199,16 @@ class App():
                     logger.error("Failed to strat gmail check thread")
 
 
+            """
+                Check online members
+            """
+            try:
+                logger.info("checking online members collection")
+                utilities.checkLANMembers()
+            except:
+                logger.error("ERROR: Failed to check online members")
+
+            # OK Take a break 
             time.sleep(10)
 
     def checkGmail(self):
@@ -223,6 +228,7 @@ class App():
 
         if (unread_Count_new != 0):
             logger.info("unread Count: "+str(unread_Count_new))
+
         unread_Count = unread_Count_new
             
     def welcomeHome(self,time_away=None):

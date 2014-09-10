@@ -19,7 +19,11 @@ for i in ("weatherUtil.log",
 			"alfr3d.log",
 			"alfr3ddaemon.log",
 			"alfr3ddaemon_stderr.log",
-			"alfr3ddaemon_stdout.log"):
+			"alfr3ddaemon_stdout.log",
+			"arduinoUtil.log",
+			"init.log",
+			"LAN.log",
+			"speak.log"):
 	newLog=i
 	oldLog=i[:-4]+"-"+strftime("%d-%m-%Y")+".log"
 

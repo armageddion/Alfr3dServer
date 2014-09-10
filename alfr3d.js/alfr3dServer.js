@@ -1,6 +1,7 @@
-var http = require("http");
-var fs = require("fs");
-var spawn = require('child_process').spawn;
+var http = require("http");							// used to host http server
+var fs = require("fs");								// filesystem access tool for reading config files
+var spawn = require('child_process').spawn;			// built-in tool for spawning children
+var PythonShell = require('python-shell');			// pluging for running python scripts
 
 console.log("Starting...");
 
@@ -11,13 +12,28 @@ var port = config.port;
 var server = http.createServer(function(request, response){
 	console.log("Received request: "+request.url);
 	if(request.url === '/hello'){		
-		var shellcmd = spawn('../utilities/tts.sh', ["hello sir"]);
+		console.log(__dirname+"/../utilities/tts.sh")
+		var shellcmd = spawn(__dirname+'/../utilities/tts.sh', ["hello sir"]);
 		response.writeHead(200, {"Content-type":"text/html"});
 		response.end("Hello to you too!");
 	}
 
 	else if(request.url === '/blink'){		
-		var shellcmd = spawn('../run/sendToArduino.py', ["Blink"]);
+		console.log('python '+__dirname+'/../run/sendToArduino.py')
+
+		var options = {
+			mode: 'text',
+			pythonPath: '/usr/bin/python',
+			scriptPath: __dirname+'/../run',
+			args: ['Blink']
+		};
+
+		PythonShell.run('sendToArduino.py', options, function (err, results) {
+			if (err) throw err;
+			// results is an array consisting of messages collected during execution
+			console.log('results: %j', results);
+		});
+
 		response.writeHead(200, {"Content-type":"text/html"});
 		response.end("Blink!");
 	}

@@ -34,30 +34,32 @@
 
 
 import sys
+import os
 from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 
-sys.path.append("..")
+#import my own utilities
+sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
 import utilities
 
-logfile = '../log/bonsai.log'
-f = open(logfile, 'a')
+logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/bonsai.log")
+log = open(logfile, 'a')
 
-f.write(strftime("%A, %d %B %Y %H:%M:%S ", localtime()))	
-f.write("\n\n")
+log.write(strftime("%A, %d %B %Y %H:%M:%S ", localtime()))	
+log.write("\n\n")
 
 def handleArguments():
 	print 'number of arguments: ', len(sys.argv)
 	print 'argument list: ',str(sys.argv)
 
 	if(len(sys.argv)>1):
-		f.write(strftime("%H:%M:%S: ")+"Received arguments:")
+		log.write(strftime("%H:%M:%S: ")+"Received arguments:")
 		for i in range(len(sys.argv)):
-			f.write(strftime("%H:%M:%S: ")+sys.argv[i]+" ")
+			log.write(strftime("%H:%M:%S: ")+sys.argv[i]+" ")
 		for i in range(len(sys.argv)):
 			if sys.argv[i] == "waterBonsai":
 				waterBonsai()
 	else:
-		f.write(strftime("%H:%M:%S: ")+"No Arguments\n")
+		log.write(strftime("%H:%M:%S: ")+"No Arguments\n")
 		#bonsai()
 
 def bonsai():
@@ -68,7 +70,7 @@ def bonsai():
 			or not.
 	"""
 	humidity = checkHumidity()
-	f.write(strftime("%H:%M:%S: ")+"Bonsai Humidity: "+ humidity + "\n")
+	log.write(strftime("%H:%M:%S: ")+"Bonsai Humidity: "+ humidity + "\n")
 	if (humidity == 'LOW'):
 		waterBonsai()
 
@@ -81,12 +83,12 @@ def checkHumidity():
 			LOW,HIGH or None
 
 	"""
-	f.write(strftime("%H:%M:%S: ")+"Checking Bonsai Humidity\n")
-	f.write(strftime("%H:%M:%S: ")+"initiating serial to arduino\n")
+	log.write(strftime("%H:%M:%S: ")+"Checking Bonsai Humidity\n")
+	log.write(strftime("%H:%M:%S: ")+"initiating serial to arduino\n")
 
 	arduino = utilities.Arduino()
 	if arduino.connect():
-		f.write(strftime("%H:%M:%S: ")+"Failed to connect to Arduino\n")
+		log.write(strftime("%H:%M:%S: ")+"Failed to connect to Arduino\n")
 		return 'None'
 
 	arduino.write("Read Humidity D\n")
@@ -111,14 +113,14 @@ def waterBonsai():
 			This function turns on the water pumps
 			and waters the bonsai.
 	"""
-	f.write(strftime("%H:%M:%S: ")+"Watering the Bonsai\n")
-	f.write(strftime("%H:%M:%S: ")+"initiating serial to arduino\n")
+	log.write(strftime("%H:%M:%S: ")+"Watering the Bonsai\n")
+	log.write(strftime("%H:%M:%S: ")+"initiating serial to arduino\n")
 	try:
 		arduino = utilities.Arduino()
 		arduino.connect()
-		f.write(strftime("%H:%M:%S: ")+"arduino connection initialized\n")
+		log.write(strftime("%H:%M:%S: ")+"arduino connection initialized\n")
 	except:
-		f.write(strftime("%H:%M:%S: ")+"Failed to initialize arduino\n")
+		log.write(strftime("%H:%M:%S: ")+"Failed to initialize arduino\n")
 		return
 
 	"""
@@ -130,22 +132,25 @@ def waterBonsai():
 	#humidity = checkHumidity()
 	#sleep(0.5)	
 	#if humidity == 'LOW':
-	#	f.write(strftime("%H:%M:%S: ")+"Turning on the irrigation pump\n")
-	#while humidity=='LOW':				
-	for j in range(3):
-		for i in range(5):
-			arduino.write("Pump1On\n")
-			f.write(strftime("%H:%M:%S: ")+"pump 1 on\n")
-			sleep(5)
-			arduino.write("Pump1Off\n")
-			arduino.write("Pump2On\n")
-			f.write(strftime("%H:%M:%S: ")+"pump 1 off; pump 2 on\n")
-			sleep(5)
-			arduino.write("Pump2Off\n")
-			f.write(strftime("%H:%M:%S: ")+"pump 2 off\n")
-		sleep(30)
+	#	log.write(strftime("%H:%M:%S: ")+"Turning on the irrigation pump\n")
+	#while humidity=='LOW':			
 
-	f.write(strftime("%H:%M:%S: ")+"Done, turning off the irrigation pump\n")
+	# water one pot in bursts	
+	for i in range(5):
+		arduino.write("Pump2On\n")
+		log.write(strftime("%H:%M:%S: ")+"pump 1 off; pump 2 on\n")
+		sleep(5)
+		arduino.write("Pump2Off\n")
+		log.write(strftime("%H:%M:%S: ")+"pump 2 off\n")
+		sleep(10)
+
+	# run the big pipe for 3 minutes.
+	arduino.write("Pump1On\n")
+	log.write(strftime("%H:%M:%S: ")+"pump 1 on\n")
+	sleep(300)
+	arduino.write("Pump1Off\n")		
+
+	log.write(strftime("%H:%M:%S: ")+"Done, turning off the irrigation pump\n")
 	arduino.write("PumpOff\n")
 
 

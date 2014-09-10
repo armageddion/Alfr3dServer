@@ -35,6 +35,10 @@ start() {
     echo "starting node server"
     node $HOMEDIR/alfr3d.js/alfr3dServer.js > $HOMEDIR/log/init.log &
 
+    ### Initialize resftul interface ###
+    echo "initializing restful interface"
+    python $HOMEDIR/run/alfr3dBottle.py > $HOMEDIR/log/init.log &
+
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
 }
 # Restart the service alfr3d

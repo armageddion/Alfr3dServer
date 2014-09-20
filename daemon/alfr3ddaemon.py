@@ -131,12 +131,14 @@ class App():
                         logger.info("Looks like you came home")
                         ishome = True
                         logger.info("starting greeting on another thread")
-                        welcome = Thread(target=self.welcomeHome, args=((time.time()-last_home),))
-                        try:
-                            welcome.start()
-                            last_home = time.time()
-                        except:
-                            logger.error("Failed to start thread")
+                        # welcome = Thread(target=self.welcomeHome, args=((time.time()-last_home),))
+                        # try:
+                        #     welcome.start()
+                        #     last_home = time.time()
+                        # except:
+                        #     logger.error("Failed to start thread")
+                        
+                        #self.welcomeHome((time.time()-last_home))
                     last_home = time.time() 
                 else:
                     logger.info("Looks like you just left... good bye")
@@ -173,12 +175,14 @@ class App():
             if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
                 if(time.time()-starttime>(waittime_quip*60)):
                     logger.info("time to be a smart ass ")
-                    quip = Thread(target=self.beSmart)
-                    logger.info("being smartass on another thread")
-                    try:
-                        quip.start()
-                    except:
-                        logger.error("Failed to start quip thread")
+                    # quip = Thread(target=self.beSmart)
+                    # logger.info("being smartass on another thread")
+                    # try:
+                    #     quip.start()
+                    # except:
+                    #     logger.error("Failed to start quip thread")
+
+                    self.beSmart()
 
                     starttime = time.time()
                     waittime_quip = random.randint(10,50)
@@ -191,12 +195,14 @@ class App():
                 Block to check unread emails (gMail)
             """
             if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
-                email = Thread(target=self.checkGmail)
-                logger.info("checking Gmail on another thread")
-                try:
-                    email.start()
-                except:
-                    logger.error("Failed to strat gmail check thread")
+                logger.info("checking Gmail")
+                # email = Thread(target=self.checkGmail)                
+                # try:
+                #     email.start()
+                # except:
+                #     logger.error("Failed to strat gmail check thread")
+
+                self.checkGmail()
 
 
             """
@@ -238,6 +244,10 @@ class App():
         """
         logger.info("Greeting the creator")
         utilities.speakWelcome(time_away)
+
+        # if gone for more than 4 hours play a tune
+        if (time_away > 60*60*4):
+            self.playTune()
         
     def beSmart(self):
         """

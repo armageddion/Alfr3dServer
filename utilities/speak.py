@@ -88,14 +88,14 @@ def speakGreeting():
 
 	if(ampm == "AM"):
 		if (int(hour) > 5):
-			greeting += "Good morning, sir. "
+			greeting += "Good morning. "
 		else:
 			greeting = "Why are you awake at this hour? "
 	else:
 		if (int(hour) < 7 or int(hour) == 12):
-			greeting += "Good afternoon, sir. "
+			greeting += "Good afternoon. "
 		else:
-			greeting += "Good evening, sir. "
+			greeting += "Good evening. "
 
 	speakString(greeting)		
 	log.write(strftime("%H:%M:%S: ")+"Spoken greeting\n")
@@ -175,7 +175,7 @@ def speakRandom():
 	speakString(greeting)
 	log.write(strftime("%H:%M:%S: ")+"Spoke random quip\n")
 
-def speakWelcome(time_away=None):
+def speakWelcome(time_away=0):
 	"""
 		Description:
 			Speak a welcome home greeting
@@ -188,20 +188,17 @@ def speakWelcome(time_away=None):
 
 	speakGreeting()
 
-	greeting = "Welcome home"
+	greeting = "Welcome home sir."
 	speakString(greeting)
 
-	# 10 minutes
-	if (time_away < 10*60):
+	# 2 hours
+	if (time_away < 2*60*60):
 		speakString("I didn't expect you back so soon")
-	# 1 hour
-	elif (time_away < 60*60):
-		speakString("")
 	# 10 hours
 	elif (time_away < 10*60*60):		
 		if ((4 < int(hour) < 7) and (strftime('%A',localtime()) != "Sunday") and (strftime('%A',localtime()) != "Saturday")):
-			speakString("I hope you were had a good day at work")
-			os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols /home/alfr3d/audio/AC\ DC/Back\ In\ Black/Shoot\ To\ Thrill.mp3")
+			speakString("I hope you had a good day at work")
+			#os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols /home/alfr3d/audio/AC\ DC/Back\ In\ Black/Shoot\ To\ Thrill.mp3")
 		else:
 			speakString("I hope you enjoyed the great outdoors")
 	else:
@@ -210,6 +207,94 @@ def speakWelcome(time_away=None):
 
 	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")
+
+def speakWelcome_guest(time_away=0):
+	"""
+		Description:
+			Speak a welcome home greeting
+	"""
+
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())
+
+	speakGreeting()
+
+	greeting = "Welcome stranger"
+	speakString(greeting)
+
+	# 2 hour
+	if (time_away < 2*60*60):
+		speakString("I didn't expect you back so soon")
+	else:
+		speakString("I haven't seen you in a while.")
+		if ((int(hour)>23) and (int(hour)<5)):
+			speakString("You are just in time for a night cap. ")
+
+
+	speakRandom()
+	log.write(strftime("%H:%M:%S: ")+"Spoke welcome guest greeting\n")	
+
+def speakWelcome_roomie(time_away=0):
+	"""
+		Description:
+			Speak a welcome greeting when a resident enters
+	"""
+
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())
+
+	speakString("Pardon the interruption sir.")
+	speakString("It appears that your roommate has returned.")
+
+	speakGreeting()
+
+	greeting = "Welcome home"
+	speakString(greeting)
+
+	# 2 hours
+	if (time_away < 2*60*60):
+		speakString("I didn't expect you back so soon")
+	# 10 hours
+	elif (time_away < 10*60*60):		
+		if ((4 < int(hour) < 7) and (strftime('%A',localtime()) != "Sunday") and (strftime('%A',localtime()) != "Saturday")):
+			speakString("I hope you had a good day at work")
+			#os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols /home/alfr3d/audio/AC\ DC/Back\ In\ Black/Shoot\ To\ Thrill.mp3")
+		else:
+			speakString("I hope you enjoyed the great outdoors")
+	else:
+		speakString("I haven't seen you in a while.")
+		speakString("I was beginning to worry.")
+
+	speakRandom()
+	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")			
+
+def speakWelcome_armageddion(time_away=0):
+	"""
+		Description:
+			Speak a welcome home greeting
+	"""
+
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())
+
+	speakGreeting()
+
+	greeting = "Welcome Armageddon"
+	speakString(greeting)
+
+	if (time_away < 10*60*60):
+		speakString("I trust you enjoyed your journey.")
+
+	speakString("It is a pleasure to see you here.")				
+
+	speakRandom()
+	log.write(strftime("%H:%M:%S: ")+"Spoke welcome armageddion greeting\n")		
 
 # Main
 if __name__ == '__main__':

@@ -37,6 +37,9 @@ import time
 from pymongo import MongoClient
 from time import strftime, localtime, time
 
+# import speak utility for greetings (as wildcard)
+from speak import *
+
 # set up logging
 logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/LAN.log")
 log = open(logfile, 'a')
@@ -83,10 +86,40 @@ def checkLANMembers():
 	for member in collection.find():
 		if member['MAC'] in netClientsMACs:
 			# update the latest time_online for online members
-			log.write(strftime("%H:%M:%S: ")+member['name'] + " is online\n")
-			collection.update({"MAC":member['MAC']},{"$set":{'IP':netClients2[member['MAC']]}})
+			if (member['state'] == "offline"):
+				log.write(strftime("%H:%M:%S: ")+member['name'] + " is online\n")
+				collection.update({"MAC":member['MAC']},{"$set":{'IP':netClients2[member['MAC']]}})
+				collection.update({"MAC":member['MAC']},{"$set":{'state':'online'}})
+
+				# if someone has just come online (after at least an hour away), decide what to do
+				if((member['type'] == "owner") and ((int(time())-member['last_online']) > 60*60)):
+					"""
+						Description:
+							what to do when owner comes home
+					"""
+					speakWelcome(int(time())-member['last_online'])
+
+				elif((member['type'] == "guest") and ((int(time())-member['last_online']) > 60*60)):
+					"""
+						Description:
+							what to do when guest comes in
+					"""
+					speakWelcome_guest(int(time())-member['last_online'])
+
+				elif((member['type'] == "resident") and ((int(time())-member['last_online']) > 60*60)):
+					"""
+						Description:
+							what to do when resident comes in
+					"""
+					speakWelcome_roomie(int(time())-member['last_online'])
+
+				elif((member['type'] == "creator") and ((int(time())-member['last_online']) > 60*60)):
+					"""
+						TODO: what to do when Armageddion enters
+					"""				
+					speakWelcome_armageddion(int(time())-member['last_online'])
+
 			collection.update({"MAC":member['MAC']},{"$set":{'last_online':int(time())}})
-			collection.update({"MAC":member['MAC']},{"$set":{'state':'online'}})
 		else:
 			# update entries for the offline members
 			log.write(strftime("%H:%M:%S: ")+member['name'] + " is offline\n")
@@ -101,7 +134,7 @@ def checkLANMembers():
 			log.write(strftime("%H:%M:%S: ")+"member "+ member + " is not in DB\n")
 			# so, lets add a new member to the DB
 			new_member = {"name":"unknown",
-				"IP":netClients2[member["MAC"]],
+				"IP":netClients2[member],
 				"MAC":member,
 				"type":"guest",
 				"state":"online",

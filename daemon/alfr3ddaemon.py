@@ -120,6 +120,7 @@ class App():
 
             # b4:18:d1:62:2e:24     # armageddion iPhone
             # 88:f7:c7:30:5d:61     # dummy test MAC
+            # f4:f1:e1:40:96:52     # armageddion MotoX
             if(os.system("sudo arp-scan --localnet | grep -i -c f4:f1:e1:40:96:52")):
                 ishome_new = False
             else:
@@ -225,7 +226,11 @@ class App():
         logger.info("checking Gmail")
 
         global unread_Count
-        unread_Count_new = utilities.getUnreadCount()
+        try:
+            unread_Count_new = utilities.getUnreadCount()
+        except:
+            logger.error("ERROR: Failed to check gmail")
+            return
 
         if (unread_Count < unread_Count_new):
             logger.info("a new email has arrived")

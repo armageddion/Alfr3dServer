@@ -15,7 +15,7 @@
 
 INITSAY="all alfred services have been initialized"
 ENDSAY="Stopping all alfred services"
-HOMEDIR=/home/alfr3d/Alfr3d-MKIII
+HOMEDIR=/home/alfr3d/Alfr3d
 
 start() {
     echo "Starting alfr3d services: "

@@ -61,9 +61,8 @@ client = MongoClient()
 db = client['Alfr3d_DB']
 collection = db['online_members_collection']
 
-# # variables for random music playing and being a smartass
+# variables for random music playing and being a smartass
 quipStartTime = time.time()
-# #waittime = randint(1,5)
 # waittime_music = 0	# DEBUG ONLY!!!
 waittime_quip = 1
 
@@ -77,6 +76,7 @@ ishome = True
 
 # gmail unread count
 unread_Count = 0
+unread_Count_new = 0
 
 # set up logging 
 logger = logging.getLogger("DaemonLog")
@@ -101,6 +101,7 @@ class MyDaemon(Daemon):
 			global quipStartTime
 			#global waittime_music 
 			global waittime_quip		   
+			global ishome
 
 			"""
 			block to play songs once in a while
@@ -134,7 +135,7 @@ class MyDaemon(Daemon):
 					quipStartTime = time.time()
 					waittime_quip = random.randint(10,50)
 					print "Timme until next quip: ", waittime_quip
-					logger.info("starttime and randint have been reset")
+					logger.info("quipStartTime and waittime_quip have been reset")
 					logger.info("next quip will be shouted in "+str(waittime_quip)+" minutes.")			
 
 			"""
@@ -144,15 +145,29 @@ class MyDaemon(Daemon):
 				logger.info("checking Gmail")
 				self.checkGmail()
 
-
 			"""
 				Check online members
 			"""
 			try:
 				logger.info("checking online members collection")
 				utilities.checkLANMembers()
-			except:
-				logger.error("ERROR: Failed to check online members")
+			except Exception, e:
+				logger.error("Failed to check online members")
+				logger.error("Traceback "+str(e))
+
+			"""
+				Check to see if Armageddion is at home
+			"""				
+			try:
+				logger.info("Checking if Armageddion is at home")
+				ret = utilities.getMemberState("Armageddion")
+				if ret == "online":
+					ishome = True
+				else:
+					ishome = False
+			except Exception, e:
+				logger.error("Failed to check if Armageddion is at home")
+				logger.error("Traceback "+str(e))
 
 			# OK Take a break 
 			time.sleep(10)
@@ -165,11 +180,13 @@ class MyDaemon(Daemon):
 		logger.info("checking Gmail")
 
 		global unread_Count
+		global unread_Count_new
 		try:
 			unread_Count_new = utilities.getUnreadCount()
 			logger.info("Gmail check successful")
-		except:
-			logger.error("ERROR: Gmail check failed")
+		except Exception, e:
+			logger.error("Gmail check failed")
+			logger.error("Traceback "+str(e))
 
 		if (unread_Count < unread_Count_new):
 			logger.info("a new email has arrived")

@@ -58,7 +58,8 @@ def checkLANMembers():
 	# Initialize the database
 	client = MongoClient()
 	db = client['Alfr3d_DB']
-	collection = db['online_members_collection']
+	collection_members = db['online_members_collection']
+	collection_users = db['users']
 
 	# find out who is online
 	os.system("sudo arp-scan --localnet > "+ netclientsfile)
@@ -83,52 +84,53 @@ def checkLANMembers():
 
 	# find who is online and 
 	# update DB status and last_online time
-	for member in collection.find():
+	for member in collection_members.find():
 		if member['MAC'] in netClientsMACs:
 			# update the latest time_online for online members
 			if (member['state'] == "offline"):
 				log.write(strftime("%H:%M:%S: ")+member['name'] + " is online\n")
-				collection.update({"MAC":member['MAC']},{"$set":{'IP':netClients2[member['MAC']]}})
-				collection.update({"MAC":member['MAC']},{"$set":{'state':'online'}})
+				collection_members.update({"MAC":member['MAC']},{"$set":{'IP':netClients2[member['MAC']]}})
+				collection_members.update({"MAC":member['MAC']},{"$set":{'state':'online'}})
 
 				# if someone has just come online (after at least an hour away), decide what to do
-				if((member['type'] == "owner") and ((int(time())-member['last_online']) > 60*60)):
-					"""
-						Description:
-							what to do when owner comes home
-					"""
-					speakWelcome(int(time())-member['last_online'])
 
-				elif((member['type'] == "guest") and ((int(time())-member['last_online']) > 60*60)):
+				if((member['type'] == "guest") and ((int(time())-member['last_online']) > 60*60)):
 					"""
 						Description:
 							what to do when guest comes in
 					"""
-					speakWelcome_guest(int(time())-member['last_online'])
+					speakWelcome_guest(member['name'],int(time())-member['last_online'])
 
-				elif((member['type'] == "resident") and ((int(time())-member['last_online']) > 60*60)):
-					"""
-						Description:
-							what to do when resident comes in
-					"""
-					speakWelcome_roomie(int(time())-member['last_online'])
+				# elif((member['type'] == "owner") and ((int(time())-member['last_online']) > 60*60)):
+				# 	"""
+				# 		Description:
+				# 			what to do when owner comes home
+				# 	"""
+				# 	speakWelcome(int(time())-member['last_online'])
 
-				elif((member['type'] == "creator") and ((int(time())-member['last_online']) > 60*60)):
-					"""
-						TODO: what to do when Armageddion enters
-					"""				
-					speakWelcome_armageddion(int(time())-member['last_online'])
+				# elif((member['type'] == "resident") and ((int(time())-member['last_online']) > 60*60)):
+				# 	"""
+				# 		Description:
+				# 			what to do when resident comes in
+				# 	"""
+				# 	speakWelcome_roomie(int(time())-member['last_online'])
 
-			collection.update({"MAC":member['MAC']},{"$set":{'last_online':int(time())}})
+				# elif((member['type'] == "creator") and ((int(time())-member['last_online']) > 60*60)):
+				# 	"""
+				# 		TODO: what to do when Armageddion enters
+				# 	"""				
+				# 	speakWelcome_armageddion(int(time())-member['last_online'])
+
+			collection_members.update({"MAC":member['MAC']},{"$set":{'last_online':int(time())}})
 		else:
 			# update entries for the offline members
 			log.write(strftime("%H:%M:%S: ")+member['name'] + " is offline\n")
-			collection.update({"MAC":member['MAC']},{"$set":{'state':'offline'}})
+			collection_members.update({"MAC":member['MAC']},{"$set":{'state':'offline'}})
 
 	# if anyone is missing from the DB
 	# add them as guest
 	for member in netClientsMACs:
-		if collection.find_one({"MAC":member}):
+		if collection_members.find_one({"MAC":member}):
 			print "member ", member, " is already in DB"
 		else:
 			log.write(strftime("%H:%M:%S: ")+"member "+ member + " is not in DB\n")
@@ -138,17 +140,42 @@ def checkLANMembers():
 				"MAC":member,
 				"type":"guest",
 				"state":"online",
-				"last_online":int(time())}
+				"last_online":int(time()),
+				"user":"unknown"}
 			try:
-				collection.insert(new_member)
+				collection_members.insert(new_member)
 				log.write(strftime("%H:%M:%S: ")+"member "+ member + " has been added to the DB\n")
 			except TypeError as e:
 				log.write(strftime("%H:%M:%S: ")+"ERROR: Failed to import member "+ member + " to the DB\n")
 				print "Unexpected error:", sys.exc_info()[0]
-				print "error: ", e
+				log.write(strftime("%H:%M:%S: ")+"Traceback: "+ str(e))
 
-	# for member in collection.find():
-	# 	print member 
+def updateUsers():
+	log.write(strftime("%H:%M:%S: ")+"updating users\n")
+	client = MongoClient()
+	db = client['Alfr3d_DB']
+	collection_users = db['users']
+	collection_members = db['online_members_collection']
+
+	for user in collection_users.find():									# go through all users
+		if user['name'] != "unknown":										# those who aren't guests
+			for member in collection_members.find({"user":user['name']}):	# find all members belonging to this user
+				if user['last_online'] < member['last_online']:				# update last online
+					collection_users.update({"user":user['name']},{"$set":{'last_online':member['last_online']}}) 
+
+				# update user's online state
+				isonline = collection_members.fine_one({'user':user['name']},{'state':'online'})
+				if isonline['state'] == 'online':
+					if user['state'] == 'offline':
+						collection_users.update({"user":user['name']},{"$set":{'state':'online'}})					
+						log.write(strftime("%H:%M:%S: ")+user['name']+" just came online\n")
+						if (int(time())-user['last_online']) > 60*60:		# if away for more than an hour
+							log.write(strftime("%H:%M:%S: ")+"greeting "+user['name']+"\n")
+							speakWelcome(user['name'], int(time())-member['last_online'])	# greet user
+				else:
+					if user['state'] == 'online':
+						collection_users.update({"user":user['name']},{"$set":{'state':'offline'}})
+						log.write(strftime("%H:%M:%S: ")+user['name']+" just went offline\n")
 
 def getMemberState(memberName):
 	# Initialize the database
@@ -173,6 +200,19 @@ def getMemberIP(memberName):
 		log.write(strftime("%H:%M:%S: ")+"member "+ memberName + " found!\n")
 		member = collection.find_one({"name":memberName})
 		return member['IP']
+	else:
+		log.write(strftime("%H:%M:%S: ")+"ERROR: member "+ memberName + " not found!\n")
+
+def getUserState(userName):
+	# Initialize the database
+	client = MongoClient()
+	db = client['Alfr3d_DB']
+	collection = db['users']	
+
+	if collection.find_one({"name":memberName}):
+		log.write(strftime("%H:%M:%S: ")+"member "+ memberName + " found!\n")
+		member = collection.find_one({"name":memberName})
+		return member['state']
 	else:
 		log.write(strftime("%H:%M:%S: ")+"ERROR: member "+ memberName + " not found!\n")
 

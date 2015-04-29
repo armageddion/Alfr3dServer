@@ -175,7 +175,7 @@ def speakRandom():
 	speakString(greeting)
 	log.write(strftime("%H:%M:%S: ")+"Spoke random quip\n")
 
-def speakWelcome(time_away=0):
+def speakWelcome(user, time_away=0):
 	"""
 		Description:
 			Speak a welcome home greeting
@@ -187,8 +187,14 @@ def speakWelcome(time_away=0):
 	ampm=strftime("%p",localtime())
 
 	speakGreeting()
+	greeting = ""
+	if user == "armageddion":
+		greeting += "welcome home sir."
+	elif user == "artem":
+		speakWelcome_roomie(time_away)
+	else:
+		speakWelcome_guest(name, time_away)
 
-	greeting = "Welcome home sir."
 	speakString(greeting)
 
 	# 2 hours
@@ -205,10 +211,9 @@ def speakWelcome(time_away=0):
 		speakString("I haven't seen you in a while.")
 		speakString("I was beginning to worry.")
 
-	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")
 
-def speakWelcome_guest(time_away=0):
+def speakWelcome_guest(name,time_away=0):
 	"""
 		Description:
 			Speak a welcome home greeting
@@ -220,8 +225,11 @@ def speakWelcome_guest(time_away=0):
 	ampm=strftime("%p",localtime())
 
 	speakGreeting()
-
-	greeting = "Welcome stranger"
+	greeting = "Welcome "
+	if name == "unknown":
+		greeting += "stranger"
+	else:
+		greeting += name
 	speakString(greeting)
 
 	# 2 hour
@@ -232,8 +240,6 @@ def speakWelcome_guest(time_away=0):
 		if ((int(hour)>23) and (int(hour)<5)):
 			speakString("You are just in time for a night cap. ")
 
-
-	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome guest greeting\n")	
 
 def speakWelcome_roomie(time_away=0):
@@ -269,7 +275,6 @@ def speakWelcome_roomie(time_away=0):
 		speakString("I haven't seen you in a while.")
 		speakString("I was beginning to worry.")
 
-	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")			
 
 def speakWelcome_armageddion(time_away=0):
@@ -293,7 +298,6 @@ def speakWelcome_armageddion(time_away=0):
 
 	speakString("It is a pleasure to see you here.")				
 
-	speakRandom()
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome armageddion greeting\n")		
 
 # Main

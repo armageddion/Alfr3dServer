@@ -90,4 +90,12 @@ def speak(command):
 
 	return template('<b>Processed request: /speak/{{command}}</b>!',command=command)
 
+@route('/<command>')
+def processCommand(command):
+	log.write(strftime("%H:%M:%S: ")+"Received request:/"+command)
+	if command == "reboot":
+		os.system('sudo reboot')
+
+	return template('<b>Processed Request {{name}}</b>!', name=Command)
+
 run(host=my_ip,port=8080)

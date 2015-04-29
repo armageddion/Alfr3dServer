@@ -96,6 +96,6 @@ def processCommand(command):
 	if command == "reboot":
 		os.system('sudo reboot')
 
-	return template('<b>Processed Request {{name}}</b>!', name=Command)
+	return template('<b>Processed Request {{name}}</b>!', name=command)
 
 run(host=my_ip,port=8080)

@@ -25,11 +25,11 @@ start() {
 
     ### Mount Samba share ###
     echo "mounting aduio shares"
-    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/
+    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/ > $HOMEDIR/log/init.log &
 
     ### Start the daemon ###
     echo "starting alfr3d daemon"
-    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log
+    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log &
 
     ### Start Node.js server ###
     echo "starting node server"
@@ -39,13 +39,19 @@ start() {
     echo "initializing restful interface"
     python $HOMEDIR/run/alfr3dBottle.py > $HOMEDIR/log/init.log &
 
+    ### Initialize Mongo Express admin UI ###
+    echo "initializing mongo admin UI"
+    node /home/alfr3d/node_modules/mongo-express/app > $HOMEDIR/log/init.log &
+
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
 }
 # Restart the service alfr3d
 stop() {
     echo "Stopping alfr3d services: "
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
-    #killproc alfr3d    
+    python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
+    killproc -TERM /home/alfr3d/Alfr3d-MKIII/run/alfr3dBottle.py
+    killproc -TERM /home/alfr3d/Alfr3d-MKIII/alfr3d.js/alfr3dServer.js
     python $HOMEDIR/daemon/alfr3ddaemon.py stop
     umount /home/alfr3d/audio
     ### Now, delete the lock file ###

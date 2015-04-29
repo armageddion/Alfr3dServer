@@ -75,12 +75,12 @@ def getWeather():
 
 	# get weather update; 4118=Toronto; 2471217=Philadelphia
 	try:
-		os.system('echo `curl "http://weather.yahooapis.com/forecastrss?w=2471217&u=c"` > weatherData.xml')
+		os.system('echo `curl "http://weather.yahooapis.com/forecastrss?w=2471217&u=c"` > '+ os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/weatherData.xml'))
 	except:
 		f.write(strftime("%H:%M:%S: ")+"Failed to get weather data\n")	
 		return False
 	f.write(strftime("%H:%M:%S: ")+"got weather data\n")
-	weatherXMLtree = ET.parse('/home/alfr3d/weatherData.xml')
+	weatherXMLtree = ET.parse(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/weatherData.xml'))
 	weatherRoot = weatherXMLtree.getroot()			# Break down the XML feed
 
 	location = weatherRoot[0][6].attrib
@@ -300,11 +300,13 @@ def speakWeather():
 	if (ampm=="AM" and int(hour)<10):
 
 		speakString("Today\'s high is expected to be "+forecastTodayHigh+" degrees")
-		speakString("Meteorology wizards are predicting "+forecastTodayText+" day with wind around "+windSpeed+" kilometers per hour")
-	
+		if veryWindy:
+			speakString("Meteorology wizards are predicting "+forecastTodayText+" day with wind around "+windSpeed+" kilometers per hour")
+		else:
+			speakString("Meteorology wizards are predicting "+forecastTodayText+" day")
 	else:
 		speakString("Current temperature in "+locationCity+" is "+currentTemperature+" degrees")
-		if (windy):
+		if veryWindy:
 			speakString("Meteorology wizards are arguing that it is a "+forecastTodayText+" day with wind around "+windSpeed+" kilometers per hour")
 		else:			
 			speakString("Meteorology wizards say that it is a "+forecastTodayText+" day")

@@ -150,7 +150,10 @@ def checkLANMembers():
 				print "Unexpected error:", sys.exc_info()[0]
 				log.write(strftime("%H:%M:%S: ")+"Traceback: "+ str(e))
 
+	updateUsers()
+
 def updateUsers():
+	print "DEBUG updating users"
 	log.write(strftime("%H:%M:%S: ")+"updating users\n")
 	client = MongoClient()
 	db = client['Alfr3d_DB']
@@ -158,30 +161,39 @@ def updateUsers():
 	collection_members = db['online_members_collection']
 
 	for user in collection_users.find():									# go through all users
+		print "DEBUG processing user ", user['name']
 		if user['name'] != "unknown":										# those who aren't guests
 			for member in collection_members.find({"user":user['name']}):	# find all members belonging to this user
 				if user['last_online'] < member['last_online']:				# update last online
-					collection_users.update({"user":user['name']},{"$set":{'last_online':member['last_online']}}) 
+					collection_users.update({"name":user['name']},{"$set":{'last_online':member['last_online']}}) 
 
-				# update user's online state
-				isonline = collection_members.fine_one({'user':user['name']},{'state':'online'})
-				if isonline['state'] == 'online':
-					if user['state'] == 'offline':
-						collection_users.update({"user":user['name']},{"$set":{'state':'online'}})					
-						log.write(strftime("%H:%M:%S: ")+user['name']+" just came online\n")
-						if (int(time())-user['last_online']) > 60*60:		# if away for more than an hour
-							log.write(strftime("%H:%M:%S: ")+"greeting "+user['name']+"\n")
-							speakWelcome(user['name'], int(time())-member['last_online'])	# greet user
-				else:
-					if user['state'] == 'online':
-						collection_users.update({"user":user['name']},{"$set":{'state':'offline'}})
-						log.write(strftime("%H:%M:%S: ")+user['name']+" just went offline\n")
+			# update user's online state
+			isonline = collection_members.find_one({"$and":
+			                                     [
+			                                             {'user':user['name']},
+			                                             {'state':'online'},
+			                                             {'type':{'$ne':'HW'}}
+			                                     ]
+			                                    })
+
+			if isonline:
+				if user['state'] == 'offline':
+					collection_users.update({"name":user['name']},{"$set":{'state':'online'}})					
+					log.write(strftime("%H:%M:%S: ")+user['name']+" just came online\n")
+					if (int(time())-user['last_online']) > 60*60:		# if away for more than an hour
+						log.write(strftime("%H:%M:%S: ")+"greeting "+user['name']+"\n")
+						speakWelcome(user['name'], int(time())-member['last_online'])	# greet user
+			else:
+				print "here4"
+				if user['state'] == 'online':
+					collection_users.update({"name":user['name']},{"$set":{'state':'offline'}})
+					log.write(strftime("%H:%M:%S: ")+user['name']+" just went offline\n")
 
 def getMemberState(memberName):
 	# Initialize the database
 	client = MongoClient()
 	db = client['Alfr3d_DB']
-	collection = db['online_members_collection']	
+	collection = db['users']	
 
 	if collection.find_one({"name":memberName}):
 		log.write(strftime("%H:%M:%S: ")+"member "+ memberName + " found!\n")

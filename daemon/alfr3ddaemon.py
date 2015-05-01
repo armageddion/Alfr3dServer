@@ -160,7 +160,7 @@ class MyDaemon(Daemon):
 			"""				
 			try:
 				logger.info("Checking if Armageddion is at home")
-				ret = utilities.getMemberState("Armageddion")
+				ret = utilities.getMemberState("armageddion")
 				if ret == "online":
 					ishome = True
 				else:

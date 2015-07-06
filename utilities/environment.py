@@ -119,9 +119,7 @@ def checkLocation():
 		speak.speakString("I trust you enjoyed your travels")
 
 		# get latest weather info for new location
-		ret = weatherUtil2.getWeather2(city_new, country_new)
-		if ret[0]:
-			print ret
+		weatherUtil2.getWeather2(city_new, country_new)
 
 	collection_env.update({"country":country},{"country":country_new,
 						  "state":state_new,

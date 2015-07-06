@@ -32,8 +32,9 @@
 
 import os
 import sys
+import math
 from random import randint
-from time import strftime, localtime
+from time import strftime, localtime, time, sleep
 
 logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/speak.log")
 log = open(logfile, 'a')
@@ -191,9 +192,17 @@ def speakWelcome(user, time_away=0):
 	if user == "armageddion":
 		greeting += "welcome home sir."
 	elif user == "artem":
+		log.write(strftime("%H:%M:%S: ")+"Greeting Artem\n")
 		speakWelcome_roomie(time_away)
+		return
+	elif user == "TamTam":
+		log.write(strftime("%H:%M:%S: ")+"Greeting Tam\n")
+		speakWelcome_Tam(time_away)
+		return
 	else:
+		log.write(strftime("%H:%M:%S: ")+"Greeting "+user+"\n")
 		speakWelcome_guest(name, time_away)
+		return
 
 	speakString(greeting)
 
@@ -277,16 +286,12 @@ def speakWelcome_roomie(time_away=0):
 
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")			
 
+# never used for now
 def speakWelcome_armageddion(time_away=0):
 	"""
 		Description:
-			Speak a welcome home greeting
+			Speak a welcome greeting
 	"""
-
-	# Time variables
-	hour=strftime("%I", localtime())
-	minute=strftime("%M", localtime())
-	ampm=strftime("%p",localtime())
 
 	speakGreeting()
 
@@ -299,6 +304,36 @@ def speakWelcome_armageddion(time_away=0):
 	speakString("It is a pleasure to see you here.")				
 
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome armageddion greeting\n")		
+
+def speakWelcome_Tam(time_away=0):
+	"""
+		Description:
+			Speak a welcome to Tam
+	"""
+
+	print (time()-time_away)
+	# meeting for a first time...
+	if (time()-time_away)<360: #5 minute grace
+		speakString("Hello Tam")
+		sleep(2)
+		speakString("It is a pleasure to finally meet you")
+		speakString("Igor has told me so much about you")
+		speakString("for example")
+		years = math.trunc((time()- 1026770371)/60/60/24/365) #approximation based on assumption: july 2002 and year = 365 days
+		speakString("did you know that he has been in love with you for over "+str(years)+" years?")
+		speakString("He has also told me that you prefer to be called")
+		speakString("the queen and ruler of the universe")
+		speakString("i will try to remember that")
+		speakString("but please dont be upset if i forget and call you Mrs. Spasoyevich")
+
+	else:
+		greeting = ''
+		title = ['Ms.','Lady']
+		name = ['Tam','TamTam', "queen and ruler of the universe"]
+
+		greeting += "welcome "+title[randint(0,len(title)-1)]+" "+name[randint(0,len(name)-1)]
+		speakGreeting()
+		speakString(greeting)
 
 # Main
 if __name__ == '__main__':

@@ -63,6 +63,7 @@ collection = db['online_members_collection']
 
 # variables for random music playing and being a smartass
 quipStartTime = time.time()
+waittime_geo = time.time()
 # waittime_music = 0	# DEBUG ONLY!!!
 waittime_quip = 1
 
@@ -101,7 +102,8 @@ class MyDaemon(Daemon):
 			#Note that logger level needs to be set to logging.DEBUG before this shows up in the logs
 			global quipStartTime
 			#global waittime_music 
-			global waittime_quip		   
+			global waittime_quip	
+			global waittime_geo	   
 			global ishome
 
 			"""
@@ -124,6 +126,12 @@ class MyDaemon(Daemon):
 			#		 logger.info("starttime and randint have been reset")
 			#		 logger.info("next song will be played in "+str(waittime_music)+" minutes.")
 
+			"""
+			block to update location if changed
+			"""
+			if(time.time()-waittime_geo>3600):
+				logger.info("checking location")
+				utilities.checkLocation()
 
 			"""
 			block to blur out quips once in a while 

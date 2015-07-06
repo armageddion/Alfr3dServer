@@ -72,115 +72,88 @@ def getWeather2(city="Toronto",country="CA"):
 
 	f.write(strftime("%H:%M:%S: ")+"got weather data\n")
 
-	locationCity =		weatherData['name']
-	windSpeed = 		weatherData['wind']['speed']
-	atmPressure = 		weatherData['main']['pressure']
-	atmHumidity = 		weatherData['main']['humidity']
-	conditionsText =	weatherData['weather'][0]['description']
-	conditionsTemp =	weatherData['main']['temp']
-	forecastTodayHigh =	weatherData['main']['temp_max']
-	forecastTodayLow =	weatherData['main']['temp_min']
-
-	#need to convert temperatures from Klevin to Celsius
-	conditionsTemp = int(KtoC(conditionsTemp))
-	forecastTodayLow = int(KtoC(forecastTodayLow))
-	forecastTodayHigh = int(KtoC(forecastTodayHigh))
+	#log current conditions
+	f.write(strftime("%H:%M:%S: ")+"City:                           "+str(weatherData['name'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Wind Speed:                     "+str(weatherData['wind']['speed'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Atmospheric Pressure            "+str(weatherData['main']['pressure'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Humidity                        "+str(weatherData['main']['humidity'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Today's Low:                    "+str(KtoC(weatherData['main']['temp_min']))+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Today's High:                   "+str(weatherData['main']['temp_max'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Description:                    "+str(weatherData['weather'][0]['description'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Current Temperature:            "+str(weatherData['main']['temp'])+"\n")		
 
 	f.write(strftime("%H:%M:%S: ")+"Parsed weather data\n")
 
-	# Subjective weather score
-	global cold
-	global hot
-	global veryCold
-	global veryHot
-	global damp
-	global windy
-	global veryWindy
-	global sunny
-	cold = False
-	hot = False
-	veryCold = False
-	veryHot = False
-	damp = False
-	windy = False
-	veryWindy = False
-	sunny = False
+	# Subjective weather 
+	badDay = []
+	badDay_data = []
+	badDay.append(False)
+	badDay.append(badDay_data)
 
-	if (int(conditionsTemp) < 5):
-		cold = True
-		if (int(forecastTodayLow) < -5):
-			veryCold = True		
-	if (int(forecastTodayHigh) > 23):
-		hot = True
-		if (int(forecastTodayHigh) > 28):
-			veryHot = True
-	if (int(atmHumidity) > 40):
-		damp = True
-	if (float(windSpeed) > 10):
-		windy = True
-		if(float(windSpeed) > 25):
-			veryWindy = True
-	if (str(conditionsText) == "Sunny"):
-		sunny = True
+	# if weather is bad... 
+	if weatherData['weather'][0]['main'] in ['Thunderstorm','Drizzle','Rain','Snow','Atmosphere','Exreeme']:
+		badDay[0] = True
+		badDay[1].append(weatherData['weather'][0]['description'])
+	elif weatherData['main']['humidity'] > 50:
+		badDay[0] = True
+		badDay[1].append(weatherData['main']['humidity'])
+	if weatherData['main']['temp_max'] > 27:
+		badDay[0] = True
+		badDay[1].append(weatherData['main']['temp_max'])		
+	elif weatherData['main']['temp_min'] > -5:
+		badDay[0] = True
+		badDay[1].append(weatherData['main']['temp_min'])		
+	if weatherData['wind']['speed'] > 10:
+		badDay[0] = True
+		badDay[1].append(weatherData['wind']['speed'])
 
-	#log current conditions
-	f.write(strftime("%H:%M:%S: ")+"City:                           "+str(locationCity)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Wind Speed:                     "+str(windSpeed)+"              	Windy:"+str(windy)+"            Very Windy:"+str(veryWindy)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Atmospheric Pressure            "+str(atmPressure)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Humidity                        "+str(atmHumidity)+"            	Damp:"+str(damp)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Today's Low:                    "+str(forecastTodayLow)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Today's High:                   "+str(forecastTodayHigh)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Description:                    "+str(conditionsText)+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Current Temperature:            "+str(conditionsTemp)+"     	Cold:"+str(cold)+"\n")		
-
-	#special log 
-	w.write(strftime("%H:%M:%S: "))
-	w.write("City:"+str(locationCity)+"\n")
-	w.write("Wind Speed:"+str(windSpeed)+",Windy:"+str(windy)+",Very Windy:"+str(veryWindy)+"\n")
-	w.write("Atmospheric Pressure:"+str(atmPressure)+"\n")
-	w.write("Humidity:"+str(atmHumidity)+",Damp:"+str(damp)+"\n")
-	w.write("Today's Low:"+str(forecastTodayLow)+"\n")
-	w.write("Today's High:"+str(forecastTodayHigh)+"\n")
-	w.write("Current Conditions:"+str(conditionsText)+"\n")
-	w.write("Current Temperature:"+str(conditionsTemp)+",Cold:"+str(cold)+"\n")		
-
-	config = ConfigParser.RawConfigParser()
-	#config.read('../config/weatherTypes.conf')
-	config.read(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../config/alfr3ddaemon.conf'))
-
-	try:
-		config.add_section(conditionsText)
-		with open((os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../config/alfr3ddaemon.conf')), 'wb') as configfile:
-			config.write(configfile)
-	except ConfigParser.DuplicateSectionError:
-		f.write(strftime("%H:%M:%S: ")+"Weather type already exists\n")
-
+	f.write(strftime("%H:%M:%S: ")+"Speaking weather data:\n")
 	# Speak the weather data
-
 	greeting = ''
 	random = ["Weather patterns ", "My scans "]
-	greeting  += random[randint(0,len(random)-1)]	
+	greeting += random[randint(0,len(random)-1)]	
 
 	global hour
 
-	if(veryWindy==False and sunny==True):
+	if badDay[0]:
+		speakString("I am afraid I don't have good news sir.")
+		greeting+="indicate "
+
+		for i in range(len(badDay[1])):
+			if badDay[1][i] == weatherData['weather'][0]['main']:
+				greeting += badDay[1][i]
+			elif badDay[1][i] == weatherData['main']['humidity']:
+				greeting += "humidity of a steam bath"
+			elif badDay[1][i] == weatherData['main']['temp_max']:
+				greeting += "it is too hot for my gentle circuits"
+			elif badDay[1][i] == weatherData['main']['temp_min']:
+				greeting += "it is catalysmically cold"
+			elif badDay[1][i] == weatherData['wind']['speed']:
+				greeting += "the wind will seriously ruin your hair"
+
+			if len(badDay[1])>=2 and i < (len(badDay[1])-1):
+				add = [' also ',' and if that isn\'t enough ', ' and to make matters worse ']
+				greeting += add[randint(0,len(add)-1)]
+			elif len(badDay[1])>2 and i == (len(badDay[1])-1):
+				greeting += " and on top of everything "
+			else:
+				f.write(strftime("%H:%M:%S: ")+greeting+"\n")
+		speakString(greeting)		
+	else:
 		speakString("Weather today is just gorgeous!")
+		greeting += " indicate "+weatherData['weather'][0]['description']
+		speakString(greeting)
+		f.write(strftime("%H:%M:%S: ")+greeting+"\n")
 
-	# Decide what to do with the data depending on the time of day
-	speakString("Current temperature in "+locationCity+" is "+str(conditionsTemp)+" degrees")
+	speakString("Current temperature in "+weatherData['name']+" is "+str(KtoC(weatherData['main']['temp']))+" degrees")
 	if (ampm=="AM" and int(hour)<10):
-		speakString("Today\'s high is expected to be "+str(forecastTodayHigh)+" degrees")
-	if (veryWindy):
-		speakString(greeting + " indicate "+conditionsText+" and wind around "+windSpeed+" kilometers per hour")
-	else:			
-		speakString(greeting + " indicate "+conditionsText)
+		speakString("Today\'s high is expected to be "+str(KtoC(weatherData['main']['temp_max']))+" degrees")
 
-	return True, weatherData
-
+	f.write(strftime("%H:%M:%S: ")+"Spoke weather\n")
+	return True
 
 def KtoC(tempK):
 	"""
 		converts temperature in kelvin to celsius
 	"""
-	tempC = int(tempK) - 273.15
-	return math.floor(tempC)
+	return math.trunc(int(tempK)-273.15)

@@ -1,0 +1,6 @@
+{
+	"port": 1337,
+	"host": "10.0.0.5",
+	"logLevel": "info",
+	"logFile": "../log/alfr3dServerJS.log"
+}

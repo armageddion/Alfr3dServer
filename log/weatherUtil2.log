@@ -1,0 +1,53 @@
+17:26:56: got weather data
+17:27:10: got weather data
+17:27:10: Parsed weather data
+17:27:10: City:                           Malvern
+17:27:10: Wind Speed:                     4.1              	Windy:False            Very Windy:False
+17:27:10: Atmospheric Pressure            1016
+17:27:10: Humidity                        59            	Damp:True
+17:27:10: Today's Low:                    303.15
+17:27:10: Today's High:                   305.15
+17:27:10: Description:                    few clouds
+17:27:10: Current Temperature:            304.37     	Cold:False
+17:27:56: got weather data
+17:27:56: Parsed weather data
+17:27:56: City:                           Malvern
+17:27:56: Wind Speed:                     4.1              	Windy:False            Very Windy:False
+17:27:56: Atmospheric Pressure            1016
+17:27:56: Humidity                        59            	Damp:True
+17:27:56: Today's Low:                    303.15
+17:27:56: Today's High:                   305.15
+17:27:56: Description:                    few clouds
+17:27:56: Current Temperature:            304.37     	Cold:False
+18:37:32: got weather data
+18:37:32: Parsed weather data
+18:37:32: City:                           Malvern
+18:37:32: Wind Speed:                     3.1              	Windy:False            Very Windy:False
+18:37:32: Atmospheric Pressure            1016
+18:37:32: Humidity                        62            	Damp:True
+18:37:32: Today's Low:                    27.85
+18:37:32: Today's High:                   30.85
+18:37:32: Description:                    sky is clear
+18:37:32: Current Temperature:            28.85     	Cold:False
+18:38:02: got weather data
+18:38:02: Parsed weather data
+18:38:02: City:                           Malvern
+18:38:02: Wind Speed:                     3.1              	Windy:False            Very Windy:False
+18:38:02: Atmospheric Pressure            1016
+18:38:02: Humidity                        62            	Damp:True
+18:38:02: Today's Low:                    27.85
+18:38:02: Today's High:                   30.85
+18:38:02: Description:                    sky is clear
+18:38:02: Current Temperature:            28.85     	Cold:False
+18:38:02: Weather type already exists
+18:39:06: got weather data
+18:39:06: Parsed weather data
+18:39:06: City:                           Malvern
+18:39:06: Wind Speed:                     3.1              	Windy:False            Very Windy:False
+18:39:06: Atmospheric Pressure            1016
+18:39:06: Humidity                        62            	Damp:True
+18:39:06: Today's Low:                    27.85
+18:39:06: Today's High:                   30.85
+18:39:06: Description:                    sky is clear
+18:39:06: Current Temperature:            28.85     	Cold:False
+18:39:06: Weather type already exists

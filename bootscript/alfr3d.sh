@@ -4,7 +4,7 @@
 #
 ### BEGIN INIT INFO
 # Provides:          alfr3d
-# Required-Start:    $local_fs $network
+# Required-Start:    $local_fs $network $mongod
 # Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
@@ -15,33 +15,32 @@
 
 INITSAY="all alfred services have been initialized"
 ENDSAY="Stopping all alfred services"
-HOMEDIR=/home/alfr3d/Alfr3d
+HOMEDIR=/home/armageddion/Alfr3d
 
 start() {
-    echo "Starting alfr3d services: "
+    echo "Starting alfr3d services: " >> $HOMEDIR/log/init.log
     ### Create the lock file ###
     touch /var/lock/alfr3d
-    echo
 
     ### Mount Samba share ###
-    echo "mounting aduio shares"
-    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/ > $HOMEDIR/log/init.log &
+    echo "Mounting aduio shares" >> $HOMEDIR/log/init.log
+    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio $HOMEDIR/../audio/ > $HOMEDIR/log/init.log &
 
     ### Start the daemon ###
-    echo "starting alfr3d daemon"
-    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log &
+    echo "Starting alfr3d daemon" >> $HOMEDIR/log/init.log
+    python $HOMEDIR/daemon/alfr3ddaemon.py start >> $HOMEDIR/log/init.log &
 
     ### Start Node.js server ###
-    echo "starting node server"
+    echo "Starting node server" >> $HOMEDIR/log/init.log
     node $HOMEDIR/alfr3d.js/alfr3dServer.js > $HOMEDIR/log/init.log &
 
     ### Initialize resftul interface ###
-    echo "initializing restful interface"
-    python $HOMEDIR/run/alfr3dBottle.py > $HOMEDIR/log/init.log &
+    echo "Initializing restful interface" >> $HOMEDIR/log/init.log
+    python $HOMEDIR/run/alfr3dBottle.py >> $HOMEDIR/log/init.log &
 
     ### Initialize Mongo Express admin UI ###
-    echo "initializing mongo admin UI"
-    node /home/alfr3d/node_modules/mongo-express/app > $HOMEDIR/log/init.log &
+    echo "Initializing mongo admin UI" >> $HOMEDIR/log/init.log
+    nodejs $HOMEDIR/../node_modules/mongo-express/app >> $HOMEDIR/log/init.log &
 
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
 }
@@ -49,11 +48,10 @@ start() {
 stop() {
     echo "Stopping alfr3d services: "
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
-    python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
-    killproc -TERM /home/alfr3d/Alfr3d-MKIII/run/alfr3dBottle.py
-    killproc -TERM /home/alfr3d/Alfr3d-MKIII/alfr3d.js/alfr3dServer.js
-    python $HOMEDIR/daemon/alfr3ddaemon.py stop
-    umount /home/alfr3d/audio
+    python $HOMEDIR/daemon/alfr3ddaemon.py stop >> $HOMEDIR/log/init.log &
+    killproc -TERM $HOMEDIR/run/alfr3dBottle.py
+    killproc -TERM $HOMEDIR/alfr3d.js/alfr3dServer.js
+    umount $HOMEDIR/../audio
     ### Now, delete the lock file ###
     rm -f /var/lock/alfr3d
     echo

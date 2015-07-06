@@ -1,0 +1,1 @@
+{options : { "create" : "environment" }, indexes:[{ "v" : 1, "key" : { "_id" : 1 }, "ns" : "Alfr3d_DB.environment", "name" : "_id_" }]}

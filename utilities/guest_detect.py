@@ -184,7 +184,6 @@ def updateUsers():
 						log.write(strftime("%H:%M:%S: ")+"greeting "+user['name']+"\n")
 						speakWelcome(user['name'], int(time())-member['last_online'])	# greet user
 			else:
-				print "here4"
 				if user['state'] == 'online':
 					collection_users.update({"name":user['name']},{"$set":{'state':'offline'}})
 					log.write(strftime("%H:%M:%S: ")+user['name']+" just went offline\n")

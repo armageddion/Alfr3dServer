@@ -51,7 +51,7 @@ import utilities
 
 # set up daemon things
 os.system('sudo mkdir -p /var/run/alfr3ddaemon')
-os.system('sudo chown alfr3d:alfr3d /var/run/alfr3ddaemon')
+#os.system('sudo chown alfr3d:alfr3d /var/run/alfr3ddaemon')
 
 # Initialize configuration parser
 config = ConfigParser.RawConfigParser()
@@ -88,6 +88,7 @@ logger.addHandler(handler)
 
 class MyDaemon(Daemon):
 	def run(self):
+		utilities.checkLocation()
 		while True:
 			"""
 				Logging Examples:
@@ -270,7 +271,7 @@ class MyDaemon(Daemon):
 			os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "+randsong)						
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid')
+	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

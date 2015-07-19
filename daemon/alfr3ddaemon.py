@@ -132,6 +132,7 @@ class MyDaemon(Daemon):
 			if(time.time()-waittime_geo>3600):
 				logger.info("checking location")
 				utilities.checkLocation()
+				waittime_geo = time.time()
 
 			"""
 			block to blur out quips once in a while 

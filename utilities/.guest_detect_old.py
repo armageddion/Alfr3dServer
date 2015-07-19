@@ -94,7 +94,7 @@ def checkLANMembers():
 
 				# if someone has just come online (after at least an hour away), decide what to do
 
-				if((member['type'] == "guest") and ((int(time())-member['last_online']) > 60*60)):
+				if((member['user'] == "unknown") and ((int(time())-member['last_online']) > 60*60)):
 					"""
 						Description:
 							what to do when guest comes in
@@ -131,7 +131,7 @@ def checkLANMembers():
 	# add them as guest
 	for member in netClientsMACs:
 		if collection_members.find_one({"MAC":member}):
-			print "member ", member, " is already in DB"
+			log.write(strftime("%H:%M:%S: ")+"member "+ member + " is already in DB\n")
 		else:
 			log.write(strftime("%H:%M:%S: ")+"member "+ member + " is not in DB\n")
 			# so, lets add a new member to the DB
@@ -153,15 +153,13 @@ def checkLANMembers():
 	updateUsers()
 
 def updateUsers():
-	print "DEBUG updating users"
 	log.write(strftime("%H:%M:%S: ")+"updating users\n")
 	client = MongoClient()
 	db = client['Alfr3d_DB']
 	collection_users = db['users']
 	collection_members = db['online_members_collection']
 
-	for user in collection_users.find():									# go through all users
-		print "DEBUG processing user ", user['name']
+	for user in collection_users.find():									# go through all users		
 		if user['name'] != "unknown":										# those who aren't guests
 			for member in collection_members.find({"$and":
 													[
@@ -184,12 +182,10 @@ def updateUsers():
 
 			if isonline:
 				if user['state'] == 'offline':
-					print "DEBUG updating ", user['name']
 					collection_users.update({"name":user['name']},{"$set":{'state':'online'}})					
 					log.write(strftime("%H:%M:%S: ")+user['name']+" just came online\n")
 					if (int(time())-user['last_online']) > 60*60:		# if away for more than an hour
 						log.write(strftime("%H:%M:%S: ")+"greeting "+user['name']+"\n")
-						print "DEBUG greeting user ", user['name']
 						speakWelcome(user['name'], int(time())-member['last_online'])	# greet user
 			else:
 				if user['state'] == 'online':

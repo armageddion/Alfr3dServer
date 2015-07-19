@@ -28,7 +28,7 @@ start() {
 
     ### Start the daemon ###
     echo "Starting alfr3d daemon" >> $HOMEDIR/log/init.log
-    python $HOMEDIR/daemon/alfr3ddaemon.py start >> $HOMEDIR/log/init.log &
+    sudo python $HOMEDIR/daemon/alfr3ddaemon.py start >> $HOMEDIR/log/init.log &
 
     ### Start Node.js server ###
     echo "Starting node server" >> $HOMEDIR/log/init.log
@@ -48,7 +48,7 @@ start() {
 stop() {
     echo "Stopping alfr3d services: "
     sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
-    python $HOMEDIR/daemon/alfr3ddaemon.py stop >> $HOMEDIR/log/init.log &
+    sudo python $HOMEDIR/daemon/alfr3ddaemon.py stop >> $HOMEDIR/log/init.log &
     killproc -TERM $HOMEDIR/run/alfr3dBottle.py
     killproc -TERM $HOMEDIR/alfr3d.js/alfr3dServer.js
     umount $HOMEDIR/../audio

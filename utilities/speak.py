@@ -243,10 +243,11 @@ def speakWelcome_guest(name,time_away=0):
 
 	# 2 hour
 	if (time_away < 2*60*60):
-		speakString("I didn't expect you back so soon")
+		speakString("I am beginning to think that you must forget things frequently ")
+		speakString("while not thinking about not forgetting things at all.")		
 	else:
 		speakString("I haven't seen you in a while.")
-		if ((int(hour)>23) and (int(hour)<5)):
+		if ((int(strftime("%H", localtime()))>21) or (int(strftime("%H", localtime()))<5)):
 			speakString("You are just in time for a night cap. ")
 
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome guest greeting\n")	

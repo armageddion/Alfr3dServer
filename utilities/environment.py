@@ -32,6 +32,7 @@
 
 import ConfigParser
 import os
+import sys
 import urllib
 import json
 import speak
@@ -60,14 +61,27 @@ def checkLocation():
 	city = cur_env['city']
 	ip = cur_env['IP']
 
+	# placeholders for my ip
+	myipv4 = None
+	myipv6 = None
+
 	# get my current ip
 	log.write(strftime("%H:%M:%S: ")+"Getting my IP\n")
 	try:
 		myipv4 = urllib.urlopen("http://ipv4bot.whatismyipaddress.com").read()
-		myipv6 = urllib.urlopen("http://ipv6bot.whatismyipaddress.com").read()
 	except Exception, e:
-		log.write(strftime("%H:%M:%S: ")+"Error getting my IP\n")
-		sys.exit(1)
+		log.write(strftime("%H:%M:%S: ")+"Error getting my IPV4\n")
+		myipv4 = None
+		log.write(strftime("%H:%M:%S: ")+"Traceback "+str(e)+"\n")
+		log.write(strftime("%H:%M:%S: ")+"Trying to get our IPV6\n")
+		try:
+			myipv6 = urllib.urlopen("http://ipv6bot.whatismyipaddress.com").read()
+		except Exception, e:
+			log.write(strftime("%H:%M:%S: ")+"Error getting my IPV6\n")
+			log.write(strftime("%H:%M:%S: ")+"Traceback "+str(e)+"\n")
+	finally:
+		if not myipv6 and not myipv4:
+			return
 
 	# get API key for db-ip.com
 	config = ConfigParser.RawConfigParser()
@@ -75,8 +89,10 @@ def checkLocation():
 	apikey = config.get("API KEY", "dbip")
 
 	# get my geo info
-	url6 = "http://api.db-ip.com/addrinfo?addr="+myipv6+"&api_key="+apikey
-	url4 = "http://api.db-ip.com/addrinfo?addr="+myipv4+"&api_key="+apikey
+	if myipv6:
+		url6 = "http://api.db-ip.com/addrinfo?addr="+myipv6+"&api_key="+apikey
+	elif myipv4:
+		url4 = "http://api.db-ip.com/addrinfo?addr="+myipv4+"&api_key="+apikey
 
 	country_new = country
 	state_new = state

@@ -33,6 +33,7 @@
 import os
 import sys
 import math
+from gmail import *
 from random import randint
 from time import strftime, localtime, time, sleep
 
@@ -216,9 +217,15 @@ def speakWelcome(user, time_away=0):
 			#os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols /home/alfr3d/audio/AC\ DC/Back\ In\ Black/Shoot\ To\ Thrill.mp3")
 		else:
 			speakString("I hope you enjoyed the great outdoors")
+			unread_count = getUnreadCount()
+			if unread_count > 1:
+				speakString("While you were gone "+str(unread_count)+" emails flooded your inbox")
 	else:
 		speakString("I haven't seen you in a while.")
 		speakString("I was beginning to worry.")
+		unread_count = getUnreadCount()
+		if unread_count > 1:
+			speakString("While you were gone "+str(unread_count)+" emails flooded your inbox")
 
 	log.write(strftime("%H:%M:%S: ")+"Spoke welcome home greeting\n")
 

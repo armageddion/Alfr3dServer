@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>·ALFR3D·</title>
+    <link rel="stylesheet" href="css/styles.min.css">
+    <script src="//use.typekit.net/tfn2bsd.js"></script>    
+    <script>try{Typekit.load();}catch(e){}</script>
+    <script src="https://cdn.firebase.com/js/client/2.1.2/firebase.js"></script>
+    <script src="js/three.min.js"></script>
+  </head>
+  <body>
+    <p class="alfr3d_url" id="alfr3d_url"></p>
+<script>
+
+        var scene, camera, renderer;
+        var geometry, material, mesh;
+
+        init();
+        animate();
+
+        function init() {
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera.position.z = 1000;
+
+                background = new THREE.PlaneGeometry(100.100,4,4);
+                background_material = new THREE.MeshBasicMaterial( { color: 0x33b5e5, wireframe: true } );
+
+                background_mesh = new THREE.Mesh(background,background_material);
+                scene.add(background_mesh)
+
+                geometry = new THREE.BoxGeometry( 200, 200, 200 );
+                material = new THREE.MeshBasicMaterial( { color: 0x33b5e5, wireframe: true } );
+
+                mesh = new THREE.Mesh( geometry, material );
+                scene.add( mesh );     
+                
+                renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setClearColor(0xffffff, 0);
+
+                document.body.appendChild( renderer.domElement );
+
+        }
+
+        function animate() {
+
+                requestAnimationFrame( animate );
+
+                mesh.rotation.x += 0.01;
+                mesh.rotation.y += 0.02;
+
+                background_mesh.rotation.x += 0.01;
+                background_mesh.rotation.y += 0.02;
+
+                renderer.render( scene, camera );
+
+        }
+
+</script>
+
+    <footer class="footer">
+      <p>..ALFR3D..2015..LitTl3.1 Industri3s..</p>
+    </footer>
+    <script src="js/scripts.min.js"></script>
+    <script src="js/logon.js"></script>
+    <script src="js/alfr3dfb.js"></script>
+  </body>
+</html>

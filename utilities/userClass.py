@@ -1,6 +1,8 @@
 import time
 from pymongo import MongoClient
 
+from deviceClass import Device
+
 class User:
 	"""
 		User Class for Alfr3d Users
@@ -31,3 +33,13 @@ class User:
 		print "location: 	"+self.location
 		print "type: 		"+self.userType
 		print "===================================="
+
+	def displayDevices(self):
+		client = MongoClient()
+		db = client['Alfr3d_DB']
+		devicesCollection = db['devices']
+
+		for member in devicesCollection.find({'user':self.name})
+			device = Device()
+			device.getDetails(member['MAC'])
+			device.display()

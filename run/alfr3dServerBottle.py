@@ -85,6 +85,7 @@ def user(command):
 		print "getting user details for user "+name
 		#dbUtil.getUserDetails(name)
 		user.display()
+		user.displayDevices()
 
 	# TODO
 	elif command == 'set':

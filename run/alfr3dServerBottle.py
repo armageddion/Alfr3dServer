@@ -99,7 +99,7 @@ def device(command):
 
 	if request.query.get('MAC'):
 		mac = request.query.get('MAC')
-		print "MAC: "+MAC
+		print "MAC: "+mac
 
 		device = Device()
 		try:

@@ -17,7 +17,7 @@ class Device:
 		client = MongoClient()
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
-		deviceDetails = devicesCollection.find_one({"name":name})
+		deviceDetails = devicesCollection.find_one({"MAC":mac})
 
 		self.IP = deviceDetails['IP']
 		self.MAC = deviceDetails['MAC'] 

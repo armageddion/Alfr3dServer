@@ -35,9 +35,11 @@
 import os
 import sys
 import socket
+import logging
 from bottle import route, run, template
 from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 
+sys.path.append('../utilities')
 import dbUtil
 
 @route('/')

@@ -60,27 +60,27 @@ def index(name="guest"):
 
 # /user/get?
 @route('/user/<command>')
-def user(command=command):
+def user(request=command):
 	print "WIP"
 
-	print "command: "+command
+	print "command: "+request
 
 	cmd = ''
 
-	if "?" in command:
-		ret = command.split('?')
+	if "?" in request:
+		ret = request.split('?')
 		cmd = ret[0]
 	else:
-		cmd = command
+		cmd = request
 
-	print "cmd: "+command
+	print "cmd: "+request
 
 @route('/device/<command>')
-def device(command=command):
+def device(request=command):
 	print "TODO"
 
 @route ('/instance/<command>')
-def instance(command=command):
+def instance(request=command):
 	print "TODO"
 
 run(host=my_ip,port=8080)

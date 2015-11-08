@@ -42,7 +42,7 @@ from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 sys.path.append('../utilities')
 import dbUtil
 from userClass import User
-from deviceClass import device
+from deviceClass import Device
 
 # get our own IP
 try:

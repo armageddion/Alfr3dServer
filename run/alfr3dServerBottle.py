@@ -41,6 +41,7 @@ from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 
 sys.path.append('../utilities')
 import dbUtil
+from userClass import User
 
 # get our own IP
 try:
@@ -80,9 +81,11 @@ def user(command):
 		if request.query.get('name'):
 			name = request.query.get('name')
 			print "name: "+name
+			#dbUtil.getUserDetails(name)
 
-			dbUtil.getUserDetails(name)
-
+			user = User()
+			user.getDetails(name)
+			user.display()
 
 @route('/device/<command>')
 def device(command):

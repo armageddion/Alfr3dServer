@@ -2,6 +2,9 @@ import sys
 import optparse
 from pymongo import MongoClient
 
+#import User Class
+import userClass
+
 client = MongoClient()
 db = client['Alfr3d_DB']
 

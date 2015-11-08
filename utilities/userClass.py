@@ -49,3 +49,5 @@ class User:
 			device = Device()
 			device.getDetails(member['MAC'])
 			result += device.display()
+
+		return result

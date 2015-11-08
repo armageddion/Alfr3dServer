@@ -29,5 +29,5 @@ class User:
 		print "state: 		"+self.state
 		print "last online:	"+str(self.last_online)
 		print "location: 	"+self.location
-		print "type: 		"+self.type
+		print "type: 		"+self.userType
 		print "===================================="

@@ -76,7 +76,7 @@ def user(command):
 	print "cmd: "+command
 
 	# getUser
-	if cmd == get:
+	if cmd == 'get':
 		if request.query.get('name'):
 			name = request.query.get('name')
 			print "name: "+name

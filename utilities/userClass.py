@@ -39,7 +39,7 @@ class User:
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
-		for member in devicesCollection.find_one({'user':self.name})
+		for member in devicesCollection.find_one({'user':self.name}):
 			device = Device()
 			device.getDetails(member['MAC'])
 			device.display()

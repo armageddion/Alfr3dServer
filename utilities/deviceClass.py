@@ -35,7 +35,7 @@ class Device:
 		result += "state: 		"+self.state				+"\n"
 		result += "last online:	"+str(self.last_online)		+"\n"
 		result += "location: 	"+self.location				+"\n"
-		result += "user: 		"+self.User 				+"\n"
+		result += "user: 		"+self.user 				+"\n"
 		result += "type: 		"+self.deviceType			+"\n"
 		result += "===================================="	+"\n"
 

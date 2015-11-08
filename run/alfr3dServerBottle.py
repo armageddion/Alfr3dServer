@@ -42,6 +42,17 @@ from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 sys.path.append('../utilities')
 import dbUtil
 
+# get our own IP
+try:
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("gmail.com",80))
+	my_ip = s.getsockname()[0]
+	s.close()
+	print "Obtained my IP"
+except:
+	print "Error: Failed to get my IP"
+
+
 @route('/')
 def index(name):
 	log.write(strftime("%H:%M:%S: ")+"Received request:/hello/"+name)

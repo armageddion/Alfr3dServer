@@ -84,8 +84,12 @@ def user(command):
 			#dbUtil.getUserDetails(name)
 
 			user = User()
-			user.getDetails(name)
-			user.display()
+			try:
+				user.getDetails(name)
+				user.display()
+			except Exception, e:
+				print "failed to find user "+name
+				print "traceback: "+str(e)
 
 @route('/device/<command>')
 def device(command):

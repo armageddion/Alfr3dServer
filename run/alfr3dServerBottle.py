@@ -58,7 +58,7 @@ def index(name="guest"):
 	log.write(strftime("%H:%M:%S: ")+"Received request:/hello/"+name)
 	return template('<b>Hello {{name}}</b>!', name=name)
 
-# /user/get?
+# /user/get?name=<name>
 @route('/user/<command>')
 def user(command):
 	print "WIP"
@@ -74,7 +74,15 @@ def user(command):
 		cmd = command
 
 	print "cmd: "+command
-	print "args: "+request.query.get('name')
+
+	# getUser
+	if cmd == get:
+		if request.query.get('name'):
+			name = request.query.get('name')
+			print "name: "+name
+
+			dbUtil.getUserDetails(name)
+
 
 @route('/device/<command>')
 def device(command):

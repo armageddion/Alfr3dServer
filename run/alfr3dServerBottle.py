@@ -54,9 +54,33 @@ except:
 
 
 @route('/')
-def index(name):
+def index(name="guest"):
 	log.write(strftime("%H:%M:%S: ")+"Received request:/hello/"+name)
 	return template('<b>Hello {{name}}</b>!', name=name)
 
+# /user/get?
+@route('/user/<command>')
+def user(command=command):
+	print "WIP"
+
+	print "command: "+command
+
+	cmd = ''
+
+	if "?" in command:
+		ret = command.split('?')
+		cmd = ret[0]
+	else:
+		cmd = command
+
+	print "cmd: "+command
+
+@route('/device/<command>')
+def device(command=command):
+	print "TODO"
+
+@route ('/instance/<command>')
+def instance(command=command):
+	print "TODO"
 
 run(host=my_ip,port=8080)

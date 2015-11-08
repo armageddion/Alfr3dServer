@@ -14,14 +14,14 @@ class User:
 	def getDetails(self,name):
 		client = MongoClient()
 		db = client['Alfr3d_DB']
-	    usersCollection = db['users']
-    	userDetails = usersCollection.find_one({"name":name})
+		usersCollection = db['users']
+		userDetails = usersCollection.find_one({"name":name})
 
-	    self.name = userDetails['name']
-	    self.state = userDetails['state']
-	    self.last_online = userDetails['last_online']    
-	    self.location = userDetails['location']
-	    self.userType = userDetails['type']
+		self.name = userDetails['name']
+		self.state = userDetails['state']
+		self.last_online = userDetails['last_online']
+		self.location = userDetails['location']
+		self.userType = userDetails['type']
 
 	def display(self):
 		print "============USER DETAILS============"

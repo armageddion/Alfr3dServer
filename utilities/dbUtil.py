@@ -3,7 +3,7 @@ import optparse
 from pymongo import MongoClient
 
 #import User Class
-import userClass
+from userClass import User
 
 client = MongoClient()
 db = client['Alfr3d_DB']
@@ -13,13 +13,18 @@ def createUser():
     print "print not implemented yet"    
 
 def getUserDetails(name='unknown', details='all'):
-        usersCollection = db['users']
-        userDetails = usersCollection.find_one({"name":name})
+    usersCollection = db['users']
+    userDetails = usersCollection.find_one({"name":name})
 
-        if details == 'all':
-                print userDetails
-        else:
-                print userDetails[details]
+    if details == 'all':
+            print userDetails
+    else:
+            print userDetails[details]
+
+    user = User()
+    user.getDetails(name)
+    user.display()
+
 
 def setUserDetails(name='',detail='',value=''):
     #TODO

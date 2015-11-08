@@ -42,6 +42,7 @@ from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 sys.path.append('../utilities')
 import dbUtil
 from userClass import User
+from deviceClass import device
 
 # get our own IP
 try:
@@ -66,34 +67,57 @@ def user(command):
 
 	print "command: "+command
 
-	cmd = ''
+	if request.query.get('name'):
+		name = request.query.get('name')
+		print "name: "+name
 
-	if "?" in command:
-		ret = command.split('?')
-		cmd = ret[0]
+		user = User()
+		try:
+			user.getDetails(name)
+		except Exception, e:
+			print "failed to find user "+name
+			print "traceback: "+str(e)		
 	else:
-		cmd = command
-
-	print "cmd: "+command
+		print "please provide user name"
 
 	# getUser
-	if cmd == 'get':
-		if request.query.get('name'):
-			name = request.query.get('name')
-			print "name: "+name
-			#dbUtil.getUserDetails(name)
+	if command == 'get':
+		print "getting user details for user "+name
+		#dbUtil.getUserDetails(name)
+		user.display()
 
-			user = User()
-			try:
-				user.getDetails(name)
-				user.display()
-			except Exception, e:
-				print "failed to find user "+name
-				print "traceback: "+str(e)
+	# TODO
+	elif command == 'set':
+		print "updating user "+ name
 
 @route('/device/<command>')
 def device(command):
-	print "TODO"
+	print "WIP"
+
+	print "command: "+command
+
+	if request.query.get('MAC'):
+		mac = request.query.get('MAC')
+		print "MAC: "+MAC
+
+		device = Device()
+		try:
+			device.getDetails(mac)
+		except Exception, e:
+			print "failed to find device wiht MAC "+mac
+			print "traceback: "+str(e)		
+	else:
+		print "please provide device mac"
+
+	# getUser
+	if command == 'get':
+		print "getting device details for device with MAC "+mac
+		#dbUtil.getUserDetails(name)
+		device.display()
+
+	# TODO
+	elif command == 'set':
+		print "updating device with MAC "+ mac
 
 @route ('/instance/<command>')
 def instance(command):

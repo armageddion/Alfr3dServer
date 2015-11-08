@@ -26,7 +26,7 @@ class User:
 	def display(self):
 		print "============USER DETAILS============"
 		print "name: 		"+self.name
-		print "state: 		"+self.sate
+		print "state: 		"+self.state
 		print "last online:	"+self.last_online
 		print "location: 	"+self.location
 		print "type: 		"+self.type

@@ -14,8 +14,7 @@ def getUserDetails(name='unknown', details='all'):
         else:
                 print userDetails[details]
 
-
-if __name__ == '__main__':
+def handleArguments():
     parser = optparse.OptionParser(
         usage="usage: %prog [options]")
 
@@ -24,7 +23,15 @@ if __name__ == '__main__':
         "--getUserDetails",
         type="str",
         dest="getUserDetails",
-        default='unknown',
+        default=None,
         help="username")
 
     (options, args) = parser.parse_args()
+
+    if options.getUserDetails:
+        getUserDetails(options.getUserDetails)
+
+
+if __name__ == '__main__':
+    # start by handling input args
+    handleArguments()

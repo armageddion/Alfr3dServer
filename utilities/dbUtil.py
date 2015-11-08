@@ -26,3 +26,5 @@ if __name__ == '__main__':
         dest="getUserDetails",
         default='unknown',
         help="username")
+
+    (options, args) = parser.parse_args()

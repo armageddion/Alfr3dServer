@@ -28,14 +28,17 @@ class Device:
 		self.deviceType = deviceDetails['type']
 
 	def display(self):
-		print "==========DEVICE DETAILS============"
-		print "IP: 		"+str(self.IP)
-		print "MAC: 		"+str(self.MAC)
-		print "state: 		"+self.state
-		print "last online:	"+str(self.last_online)
-		print "location: 	"+self.location
-		print "user: 		"+self.user
-		print "type: 		"+self.deviceType
-		print "===================================="
+		result = ""
+		result += "==========DEVICE DETAILS============"	+"\n"
+		result += "IP: 		"+str(self.IP)					+"\n"
+		result += "MAC: 		"+str(self.MAC)				+"\n"
+		result += "state: 		"+self.state				+"\n"
+		result += "last online:	"+str(self.last_online)		+"\n"
+		result += "location: 	"+self.location				+"\n"
+		result += "user: 		"+self.User 				+"\n"
+		result += "type: 		"+self.deviceType			+"\n"
+		result += "===================================="	+"\n"
 
+		print result 
+		return result
 	

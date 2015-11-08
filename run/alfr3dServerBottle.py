@@ -65,7 +65,7 @@ def index(name="guest"):
 def user(command):
 	print "WIP"
 
-	print "command: "+command
+	result = ""
 
 	if request.query.get('name'):
 		name = request.query.get('name')
@@ -84,8 +84,10 @@ def user(command):
 	if command == 'get':
 		print "getting user details for user "+name
 		#dbUtil.getUserDetails(name)
-		user.display()
-		user.displayDevices()
+		result += user.display()
+		result += user.displayDevices()
+
+		return template(result)
 
 	# TODO
 	elif command == 'set':
@@ -109,6 +111,7 @@ def device(command):
 			print "traceback: "+str(e)		
 	else:
 		print "please provide device mac"
+		return
 
 	# getUser
 	if command == 'get':

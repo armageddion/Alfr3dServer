@@ -29,7 +29,7 @@ class Device:
 
 	def display(self):
 		print "==========DEVICE DETAILS============"
-		print "IP: 			"+str(self.IP)
+		print "IP: 		"+str(self.IP)
 		print "MAC: 		"+str(self.MAC)
 		print "state: 		"+self.state
 		print "last online:	"+str(self.last_online)

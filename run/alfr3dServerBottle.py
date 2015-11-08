@@ -74,6 +74,7 @@ def user(command):
 		cmd = command
 
 	print "cmd: "+command
+	print "args: "+request.query.get('name')
 
 @route('/device/<command>')
 def device(command):

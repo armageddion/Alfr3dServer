@@ -87,7 +87,7 @@ def user(command):
 		result += user.display()
 		result += user.displayDevices()
 
-		return template(result)
+		return template(txt2HTML(result))
 
 	# TODO
 	elif command == 'set':
@@ -126,5 +126,16 @@ def device(command):
 @route ('/instance/<command>')
 def instance(command):
 	print "TODO"
+
+def txt2HTML(txt):
+	result = "<HTML><BODY>\n"
+	arr = txt.split('\n')
+	for i in range(len(arr)):
+		result += "<p>"
+		result += arr[i]
+		result += "</p>"
+
+	result += "</HTML></BODY>\n"
+	return result
 
 run(host=my_ip,port=8080)

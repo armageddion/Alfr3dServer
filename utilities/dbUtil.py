@@ -4,6 +4,7 @@ from pymongo import MongoClient
 
 #import User Class
 from userClass import User
+from deviceClass import Device
 
 client = MongoClient()
 db = client['Alfr3d_DB']

@@ -31,7 +31,9 @@ class User:
 		result+= "name: 		"+self.name				+"\n"
 		result+= "state: 		"+self.state			+"\n"
 		result+= "last online:	"+str(self.last_online)	+"\n"
-		result+= "location: 	"+self.location			+"\n"
+		result+= "location: 	"+						+"\n"
+		result+= "	latitue:	"+self.location['lat']  +"\n"
+		result+= "	longitude:	"+self.location['long'] +"\n"
 		result+= "type: 		"+self.userType			+"\n"
 		result+= "===================================="	+"\n"
 

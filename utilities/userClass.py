@@ -27,15 +27,15 @@ class User:
 
 	def display(self):
 		result = ""
-		result+= "============USER DETAILS============"	+"\n"
-		result+= "name: 		"+self.name				+"\n"
-		result+= "state: 		"+self.state			+"\n"
-		result+= "last online:	"+str(self.last_online)	+"\n"
-		result+= "location: 	"						+"\n"
-		result+= "	latitue:	"+self.location['lat']  +"\n"
-		result+= "	longitude:	"+self.location['long'] +"\n"
-		result+= "type: 		"+self.userType			+"\n"
-		result+= "===================================="	+"\n"
+		result+= "============USER DETAILS============"		+"\n"
+		result+= "name: 		"+self.name					+"\n"
+		result+= "state: 		"+self.state				+"\n"
+		result+= "last online:	"+str(self.last_online)		+"\n"
+		result+= "location: 	"							+"\n"
+		result+= "	latitue:	"+str(self.location['lat']) +"\n"
+		result+= "	longitude:	"+str(self.location['long'])+"\n"
+		result+= "type: 		"+self.userType				+"\n"
+		result+= "===================================="		+"\n"
 
 		print result
 		return result

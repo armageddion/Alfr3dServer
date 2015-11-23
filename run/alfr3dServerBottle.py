@@ -128,7 +128,7 @@ def instance(command):
 	print "TODO"
 
 def txt2HTML(txt):
-	result = "<HTML><BODY>\n"
+	result = "<HTML><HEAD><TITLE>Alfr3d:Results</TITLE></HEAD><BODY>\n"
 	arr = txt.split('\n')
 	for i in range(len(arr)):
 		result += "<p>"

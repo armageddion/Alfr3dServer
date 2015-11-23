@@ -35,8 +35,8 @@ class Device:
 		result += "state: 		"+self.state				+"\n"
 		result += "last online:	"+str(self.last_online)		+"\n"
 		result += "location: 	"							+"\n"
-		result+= "	latitue:	"+str(self.location['lat']) +"\n"
-		result+= "	longitude:	"+str(self.location['long'])+"\n"
+		result+= "	latitue:	"+str(self.location[0]) 	+"\n"	# Latitude
+		result+= "	longitude:	"+str(self.location[1])		+"\n"	# Longitude
 		result += "user: 		"+self.user 				+"\n"
 		result += "type: 		"+self.deviceType			+"\n"
 		result += "===================================="	+"\n"

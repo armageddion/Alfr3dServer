@@ -93,6 +93,7 @@ def user(command):
 	elif command == 'set':
 		print "updating user "+ name
 
+# /device/get?MAC=<mac>
 @route('/device/<command>')
 def device(command):
 	print "WIP"
@@ -113,10 +114,9 @@ def device(command):
 		print "please provide device mac"
 		return
 
-	# getUser
+	# getDevice
 	if command == 'get':
 		print "getting device details for device with MAC "+mac
-		#dbUtil.getUserDetails(name)
 		device.display()
 
 	# TODO

@@ -26,7 +26,7 @@ def getUserDetails(name='unknown', details='all'):
     user.getDetails(name)
     user.display()
 
-
+# can only change type, last_online, location
 def setUserDetails(name='',detail='',value=''):
     #TODO
     print "print not implemented yet"    
@@ -35,9 +35,20 @@ def createDevice():
     #TODO
     print "print not implemented yet"    
 
-def getDeviceDetails(name='unknown', details='all'):                
+def getDeviceDetails(mac='unknown', details='all'):                
     #TODO
-    print "print not implemented yet"
+    print "WIP"
+    devicesCollection = db['devices']
+    deviceDetails = devicesCollection.find_one({"MAC":mac})
+
+    if details == 'all':
+        print deviceDetails
+    else:
+        print deviceDetails[details]
+
+    device = Device()
+    device.getDetails(mac)
+    device.display()
 
 def setDeviceDetails(name='',detail='',value=''):
     #TODO

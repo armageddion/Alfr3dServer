@@ -50,6 +50,7 @@ def getDeviceDetails(mac='unknown', details='all'):
     device.getDetails(mac)
     device.display()
 
+# can only change...
 def setDeviceDetails(name='',detail='',value=''):
     #TODO
     print "print not implemented yet"    

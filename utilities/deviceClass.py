@@ -38,7 +38,7 @@ class Device:
 
 		# now that that's out of the way,
 		# update the history
-		self.getDetails(self.MAC)
+		self.getDetails(mac)
 		historyCollection = db['devices.history']
 		historyCollection.insert(self)
 

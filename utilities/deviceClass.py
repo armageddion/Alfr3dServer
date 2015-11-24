@@ -39,9 +39,9 @@ class Device:
 		# now that that's out of the way,
 		# update the history
 		deviceDetails = devicesCollection.find_one({"MAC":mac})
-		historyDetails = { "device" = deviceDetails['_id'],
-			"location":deviceDetails['location'],
-			"time":int(time.time())}
+		historyDetails = {	"device":deviceDetails['_id'],
+							"location":deviceDetails['location'],
+							"time":int(time.time())}
 
 		historyCollection = db['devices.history']
 		historyCollection.insert(historyDetails)

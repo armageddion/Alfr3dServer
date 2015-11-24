@@ -38,9 +38,9 @@ class Device:
 
 		# now that that's out of the way,
 		# update the history
-		self.getDetails(mac)
+		deviceDetails = devicesCollection.find_one({"MAC":mac})
 		historyCollection = db['devices.history']
-		historyCollection.insert(self)
+		historyCollection.insert(deviceDetails)
 
 	def display(self):
 		result = ""

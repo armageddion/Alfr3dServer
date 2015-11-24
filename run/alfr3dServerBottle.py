@@ -137,7 +137,7 @@ def device(command):
 		if request.query.get('location'):
 			loc = []
 			for i in request.query.get('location').split(","):
-				loc.append(int(i))
+				loc.append(float(i))
 			updateList['location'] = loc
 		if request.query.get('user'):
 			updateList['user'] = request.query.get('user')			

@@ -104,13 +104,6 @@ def device(command):
 	if request.query.get('MAC'):
 		mac = request.query.get('MAC')
 		print "MAC: "+mac
-
-		device = Device()
-		try:
-			device.getDetails(mac)
-		except Exception, e:
-			print "failed to find device wiht MAC "+mac
-			print "traceback: "+str(e)		
 	else:
 		print "please provide device mac"
 		return
@@ -118,6 +111,14 @@ def device(command):
 	# getDevice
 	if command == 'get':
 		print "getting device details for device with MAC "+mac
+		
+		device = Device()
+		try:
+			device.getDetails(mac)
+		except Exception, e:
+			print "failed to find device wiht MAC "+mac
+			print "traceback: "+str(e)	
+		
 		result += device.display()
 
 		return template(txt2HTML(result))
@@ -125,6 +126,8 @@ def device(command):
 	# TODO
 	elif command == 'set':
 		print "updating device with MAC "+ mac
+		if request.query.get('location'):
+			print "location", request.query.get('location')
 
 @route ('/instance/<command>')
 def instance(command):

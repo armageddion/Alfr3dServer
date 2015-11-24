@@ -36,7 +36,7 @@ import os
 import sys
 import socket
 import logging
-from bottle import route, run, template, request
+from bottle import route, run, template, request, redirect
 from time import gmtime, strftime, localtime, sleep		# needed to obtain time
 
 sys.path.append('../utilities')
@@ -150,7 +150,7 @@ def device(command):
 			print "failed to update device wiht MAC "+mac
 			print "traceback: "+str(e)	
 
-		route('/device/get?MAC='+mac)		
+		redirect('/device/get?MAC='+mac)		
 			
 @route ('/instance/<command>')
 def instance(command):

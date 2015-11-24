@@ -126,9 +126,29 @@ def device(command):
 	# TODO
 	elif command == 'set':
 		print "updating device with MAC "+ mac
+		updateList = {}
+		device = Device()
+		if request.query.get('IP'):
+			updateList['IP'] = request.query.get('IP')
+		if request.query.get('state'):
+			updateList['state'] = request.query.get('state')
+		if request.query.get('last_online'):
+			updateList['last_online'] = request.query.get('last_online')
 		if request.query.get('location'):
-			print "location", request.query.get('location')
+			updateList['location'] = request.query.get('location')
+		if request.query.get('user'):
+			updateList['user'] = request.query.get('user')			
+		if request.query.get('deviceType'):
+			updateList['deviceType'] = request.query.get('deviceType')			
 
+		try:
+			device.setDetails(mac,updateList)
+		except Exception, e:
+			print "failed to update device wiht MAC "+mac
+			print "traceback: "+str(e)	
+
+		route('/device/get?MAC='+mac)		
+			
 @route ('/instance/<command>')
 def instance(command):
 	print "TODO"

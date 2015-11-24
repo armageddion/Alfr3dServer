@@ -36,8 +36,6 @@ def createDevice():
     print "print not implemented yet"    
 
 def getDeviceDetails(mac='unknown', details='all'):                
-    #TODO
-    print "WIP"
     devicesCollection = db['devices']
     deviceDetails = devicesCollection.find_one({"MAC":mac})
 

@@ -79,11 +79,11 @@ def user(command):
 			print "traceback: "+str(e)		
 	else:
 		print "please provide user name"
+		return
 
 	# getUser
 	if command == 'get':
 		print "getting user details for user "+name
-		#dbUtil.getUserDetails(name)
 		result += user.display()
 		result += user.displayDevices()
 
@@ -97,8 +97,9 @@ def user(command):
 @route('/device/<command>')
 def device(command):
 	print "WIP"
+	print request
 
-	print "command: "+command
+	result = ""
 
 	if request.query.get('MAC'):
 		mac = request.query.get('MAC')
@@ -117,7 +118,9 @@ def device(command):
 	# getDevice
 	if command == 'get':
 		print "getting device details for device with MAC "+mac
-		device.display()
+		result += device.display()
+
+		return template(txt2HTML(result))
 
 	# TODO
 	elif command == 'set':

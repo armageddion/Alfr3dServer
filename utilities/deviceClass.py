@@ -9,7 +9,7 @@ class Device:
 	MAC = '00:00:00:00:00:00'
 	state = 'offline'
 	last_online = time.time()
-	location = 'unknown'
+	location = [0,0]
 	user = 'unknown'
 	deviceType = 'guest'
 
@@ -26,6 +26,15 @@ class Device:
 		self.location = deviceDetails['location']
 		self.user = deviceDetails['user']
 		self.deviceType = deviceDetails['type']
+
+	# Device.setDetails(mac, {detail:value, detail2:value2,...})
+	def setDetails(self,mac,details):
+		client = MongoClient()
+		db = client['Alfr3d_DB']
+		devicesCollection = db['devices']
+
+		for i in details:
+			devicesCollection.update({"MAC":mac},{"$set":{i:details[i]}})
 
 	def display(self):
 		result = ""

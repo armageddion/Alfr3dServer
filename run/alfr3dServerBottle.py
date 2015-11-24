@@ -135,7 +135,11 @@ def device(command):
 		if request.query.get('last_online'):
 			updateList['last_online'] = request.query.get('last_online')
 		if request.query.get('location'):
-			updateList['location'] = request.query.get('location')
+			loc = []
+			print request.query.get('location')
+			for i in request.query.get('location'):
+				loc.append(i)
+			updateList['location'] = loc
 		if request.query.get('user'):
 			updateList['user'] = request.query.get('user')			
 		if request.query.get('deviceType'):

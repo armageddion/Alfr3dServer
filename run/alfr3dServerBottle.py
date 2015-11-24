@@ -106,7 +106,7 @@ def device(command):
 		print "MAC: "+mac
 	else:
 		print "please provide device mac"
-		return
+		return template('<b>please provide device mac</b>!')
 
 	# getDevice
 	if command == 'get':
@@ -118,6 +118,7 @@ def device(command):
 		except Exception, e:
 			print "failed to find device wiht MAC "+mac
 			print "traceback: "+str(e)	
+			return template('<b>failed to find device wiht MAC '+mac+'</b>!')
 		
 		result += device.display()
 
@@ -128,6 +129,13 @@ def device(command):
 		print "updating device with MAC "+ mac
 		updateList = {}
 		device = Device()
+		try:
+			device.getDetails(mac)
+		except Exception, e:
+			print "failed to find device wiht MAC "+mac
+			print "traceback: "+str(e)
+			return template('<b>failed to find device wiht MAC '+mac+'</b>!')
+
 		if request.query.get('IP'):
 			updateList['IP'] = request.query.get('IP')
 		if request.query.get('state'):
@@ -149,6 +157,7 @@ def device(command):
 		except Exception, e:
 			print "failed to update device wiht MAC "+mac
 			print "traceback: "+str(e)	
+			return template('<b>failed to update device wiht MAC '+mac+'</b>!')
 
 		redirect('/device/get?MAC='+mac)		
 			

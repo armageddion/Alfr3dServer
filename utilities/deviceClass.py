@@ -36,6 +36,12 @@ class Device:
 		for i in details:
 			devicesCollection.update({"MAC":mac},{"$set":{i:details[i]}})
 
+		# now that that's out of the way,
+		# update the history
+		self.getDetails()
+		historyCollection = db['devices.history']
+		historyCollection.insert(self)
+
 	def display(self):
 		result = ""
 		result += "==========DEVICE DETAILS============"	+"\n"

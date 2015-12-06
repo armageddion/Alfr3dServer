@@ -14,3 +14,5 @@ from speak import *
 from gmail import *
 from guest_detect import *
 from environment import *
+from deviceClass import *
+from userClass import *

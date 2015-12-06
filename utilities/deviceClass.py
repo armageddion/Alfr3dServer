@@ -27,18 +27,18 @@ class Device:
 		self.user = deviceDetails['user']
 		self.deviceType = deviceDetails['type']
 
-	# Device.setDetails(mac, {detail:value, detail2:value2,...})
-	def setDetails(self,mac,details):
+	# Device.setDetails({detail:value, detail2:value2,...})
+	def setDetails(self, details):
 		client = MongoClient()
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
 		for i in details:
-			devicesCollection.update({"MAC":mac},{"$set":{i:details[i]}})
+			devicesCollection.update({"MAC":self.MAC},{"$set":{i:details[i]}})
 
 		# now that that's out of the way,
 		# update the history
-		deviceDetails = devicesCollection.find_one({"MAC":mac})
+		deviceDetails = devicesCollection.find_one({"MAC":self.MAC})
 		historyDetails = {	"device":deviceDetails['_id'],
 							"location":deviceDetails['location'],
 							"time":int(time.time())}

@@ -249,7 +249,7 @@ class MyDaemon(Daemon):
 
 		# select a random song to play given certain weather conditions		
 		try:
-			tempint = random.randint(1,5)
+			tempint = random.	(1,5)
 			cond = config.get(currentConditions, str(tempint))		
 			logger.info("found a weather appropriate song") 
 			utilities.speakString("This should cheer you up.")

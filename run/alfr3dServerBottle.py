@@ -5,7 +5,7 @@
 	The intent of this revision is to be used in daily cron to
 	water my bonsai
 """
-# Copyright (c) 2010-2014 LiTtl3.1 Industries (LiTtl3.1).
+# Copyright (c) 2010-2015 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
 # This source code and any compilation or derivative thereof is the
 # proprietary information of LiTtl3.1 Industries and is
@@ -153,7 +153,7 @@ def device(command):
 			updateList['deviceType'] = request.query.get('deviceType')			
 
 		try:
-			device.setDetails(mac,updateList)
+			device.setDetails(updateList)
 		except Exception, e:
 			print "failed to update device wiht MAC "+mac
 			print "traceback: "+str(e)	

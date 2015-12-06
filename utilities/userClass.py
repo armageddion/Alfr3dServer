@@ -33,7 +33,6 @@ class User:
 		for i in details:
 			usersCollection.update({"name":self.name},{"$set":{i:details[i]}})
 
-
 	def display(self):
 		result = ""
 		result+= "============USER DETAILS============"		+"\n"

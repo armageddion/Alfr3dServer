@@ -154,12 +154,23 @@ def device(command):
 		if request.query.get('deviceType'):
 			updateList['deviceType'] = request.query.get('deviceType')			
 
+		# set device details
 		try:
 			device.setDetails(updateList)
 		except Exception, e:
 			print "failed to update device wiht MAC "+mac
 			print "traceback: "+str(e)	
 			return template('<b>failed to update device wiht MAC '+mac+'</b>!')
+
+		# update last_online time for the corresponding user
+		try:
+			user = User()
+			user.getDetails(device.user)
+			user.setDetails({'last_online':updateList['last_online']})
+		except Exception, e:
+			print "failed to update last seen time for user "+device.user
+			print "traceback: "+str(e)	
+			return template('<b>failed to update last seen time for user '+device.user+'</b>!')
 
 		redirect('/device/get?MAC='+mac)		
 			

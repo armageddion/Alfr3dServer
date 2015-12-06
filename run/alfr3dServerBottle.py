@@ -37,7 +37,7 @@ import sys
 import socket
 import logging
 from bottle import route, run, template, request, redirect
-from time import gmtime, strftime, localtime, sleep		# needed to obtain time
+from time import gmtime, strftime, localtime, sleep, time		# needed to obtain time
 
 sys.path.append('../utilities')
 import dbUtil
@@ -142,6 +142,8 @@ def device(command):
 			updateList['state'] = request.query.get('state')
 		if request.query.get('last_online'):
 			updateList['last_online'] = request.query.get('last_online')
+		else:
+			updateList['last_online'] = time()
 		if request.query.get('location'):
 			loc = []
 			for i in request.query.get('location').split(","):

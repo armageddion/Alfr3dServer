@@ -13,7 +13,7 @@ class User:
 	location = 'unknown'
 	userType = 'guest'
 
-	def getDetails(self,name):
+	def getDetails(self, name):
 		client = MongoClient()
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
@@ -24,6 +24,15 @@ class User:
 		self.last_online = userDetails['last_online']
 		self.location = userDetails['location']
 		self.userType = userDetails['type']
+
+	def setDetails(self, details):
+		client = MongoClient()
+		db = client['Alfr3d_DB']
+		usersCollection = db['users']
+
+		for i in details:
+			usersCollection.update({"name":self.name},{"$set":{i:details[i]}})
+
 
 	def display(self):
 		result = ""

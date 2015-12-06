@@ -1,6 +1,8 @@
 import time
 from pymongo import MongoClient
 
+from userClass import User
+
 class Device:
 	"""
 		User Class for Alfr3d Users
@@ -32,9 +34,17 @@ class Device:
 		client = MongoClient()
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
+		usersCollection = db['users']
 
 		for i in details:
 			devicesCollection.update({"MAC":self.MAC},{"$set":{i:details[i]}})
+
+		user = User()
+		user.getDetails(self.user)
+		if details['last_online']:
+			user.setDetails({'last_online':details['last_online']})
+		else:
+			user.setDetails({'last_online':time.time()})
 
 		# now that that's out of the way,
 		# update the history

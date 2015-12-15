@@ -39,11 +39,6 @@ from speak import speakString
 from random import randint
 import ConfigParser
 
-logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/weatherUtil2.log")
-weatherData2 = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/weatherData2.txt")
-f = open(logfile, 'a')
-w = open(weatherData2, 'w')
-
 # Time variables
 hour=strftime("%I", localtime())
 minute=strftime("%M", localtime())
@@ -56,6 +51,9 @@ def getWeather2(city="Toronto",country="CA"):
         Return:
             Boolean; True if successful, False if not.
     """
+	logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/weatherUtil2.log")
+	f = open(logfile, 'a')
+
 	# get API key for db-ip.com
 	config = ConfigParser.RawConfigParser()
 	config.read(os.path.join(os.path.dirname(__file__),'../config/apikeys.conf'))
@@ -63,7 +61,8 @@ def getWeather2(city="Toronto",country="CA"):
 
 	weatherData = None
 
-	url = "http://api.openweathermap.org/data/2.5/weather?q="+city+","+country
+	#url = "http://api.openweathermap.org/data/2.5/weather?q="+city+","+country
+	url = "http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+'&appid='+apikey
 	try:
 		weatherData = json.loads(urllib.urlopen(url).read().decode('utf-8'))
 	except:
@@ -78,7 +77,7 @@ def getWeather2(city="Toronto",country="CA"):
 	f.write(strftime("%H:%M:%S: ")+"Atmospheric Pressure            "+str(weatherData['main']['pressure'])+"\n")
 	f.write(strftime("%H:%M:%S: ")+"Humidity                        "+str(weatherData['main']['humidity'])+"\n")
 	f.write(strftime("%H:%M:%S: ")+"Today's Low:                    "+str(KtoC(weatherData['main']['temp_min']))+"\n")
-	f.write(strftime("%H:%M:%S: ")+"Today's High:                   "+str(weatherData['main']['temp_max'])+"\n")
+	f.write(strftime("%H:%M:%S: ")+"Today's High:                   "+str(KtoC(weatherData['main']['temp_max']))+"\n")
 	f.write(strftime("%H:%M:%S: ")+"Description:                    "+str(weatherData['weather'][0]['description'])+"\n")
 	f.write(strftime("%H:%M:%S: ")+"Current Temperature:            "+str(weatherData['main']['temp'])+"\n")		
 
@@ -97,10 +96,10 @@ def getWeather2(city="Toronto",country="CA"):
 	elif weatherData['main']['humidity'] > 50:
 		badDay[0] = True
 		badDay[1].append(weatherData['main']['humidity'])
-	if weatherData['main']['temp_max'] > 27:
+	if KtoC(weatherData['main']['temp_max']) > 27:
 		badDay[0] = True
 		badDay[1].append(weatherData['main']['temp_max'])		
-	elif weatherData['main']['temp_min'] > -5:
+	elif KtoC(weatherData['main']['temp_min']) < -5:
 		badDay[0] = True
 		badDay[1].append(weatherData['main']['temp_min'])		
 	if weatherData['wind']['speed'] > 10:
@@ -141,7 +140,7 @@ def getWeather2(city="Toronto",country="CA"):
 		speakString(greeting)		
 	else:
 		speakString("Weather today is just gorgeous!")
-		greeting += " indicate "+weatherData['weather'][0]['description']
+		greeting += "indicate "+weatherData['weather'][0]['description']
 		speakString(greeting)
 		f.write(strftime("%H:%M:%S: ")+greeting+"\n")
 
@@ -151,6 +150,8 @@ def getWeather2(city="Toronto",country="CA"):
 
 	f.write(strftime("%H:%M:%S: ")+"Spoke weather\n")
 	return True
+
+	f.close()
 
 def KtoC(tempK):
 	"""

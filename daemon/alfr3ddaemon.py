@@ -57,7 +57,7 @@ os.system('sudo mkdir -p /var/run/alfr3ddaemon')
 config = ConfigParser.RawConfigParser()
 
 # Initialize the database
-client = MongoClient()
+client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 db = client['Alfr3d_DB']
 collection = db['online_members_collection']
 
@@ -87,9 +87,9 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/alfr3ddaemon.log
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-class MyDaemon(Daemon):
+class MyDaemon(Daemon):		
 	def run(self):
-		utilities.checkLocation()
+		utilities.checkLocation()		
 		while True:
 			"""
 				Logging Examples:
@@ -101,7 +101,7 @@ class MyDaemon(Daemon):
 
 			#Note that logger level needs to be set to logging.DEBUG before this shows up in the logs
 			global quipStartTime
-			#global waittime_music 
+			#global waittime_music
 			global waittime_quip	
 			global waittime_geo	   
 			global ishome
@@ -249,7 +249,7 @@ class MyDaemon(Daemon):
 
 		# select a random song to play given certain weather conditions		
 		try:
-			tempint = random.	(1,5)
+			tempint = random.randint(1,5)
 			cond = config.get(currentConditions, str(tempint))		
 			logger.info("found a weather appropriate song") 
 			utilities.speakString("This should cheer you up.")
@@ -280,7 +280,8 @@ class MyDaemon(Daemon):
 			os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "+randsong)						
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
+	#daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
+	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/stderr')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

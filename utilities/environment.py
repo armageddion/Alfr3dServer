@@ -33,6 +33,7 @@
 import ConfigParser
 import os
 import sys
+import socket
 import urllib
 import json
 import speak
@@ -43,23 +44,28 @@ from time import strftime, localtime
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
 
-logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/environment.log")
-log = open(logfile, 'a')
 
 def checkLocation():
+	logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/environment.log")
+	log = open(logfile, 'a')
 
 	# get latest DB environment info
 	# Initialize the database
-	client = MongoClient()
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	db = client['Alfr3d_DB']
 	collection_env = db['environment']
 
-	cur_env = collection_env.find_one()
-	print cur_env
-	country = cur_env['country']
-	state = cur_env['state']
-	city = cur_env['city']
-	ip = cur_env['IP']
+	try:
+		cur_env = collection_env.find_one({"name":socket.gethostname()})
+		country = cur_env['country']
+		state = cur_env['state']
+		city = cur_env['city']
+		ip = cur_env['IP']
+	except:
+		country = 'unknown'
+		state = 'unknown'
+		city = 'unknown'
+		ip = 'unknown'
 
 	# placeholders for my ip
 	myipv4 = None
@@ -137,10 +143,13 @@ def checkLocation():
 		# get latest weather info for new location
 		weatherUtil2.getWeather2(city_new, country_new)
 
-	collection_env.update({"country":country},{"country":country_new,
-						  "state":state_new,
-						  "city":city_new,
-						  "IP":ip_new})
+	collection_env.update({"name":socket.gethostname()},{"$set":{
+				  		   "country":country_new,
+						   "state":state_new,
+						   "city":city_new,
+						   "IP":ip_new}})
+
+	log.close()
 
 # Main - only really used for testing
 if __name__ == '__main__':

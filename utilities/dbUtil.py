@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from userClass import User
 from deviceClass import Device
 
-client = MongoClient()
+client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 db = client['Alfr3d_DB']
 
 def createUser():

@@ -34,7 +34,6 @@ import os
 import sys
 import ConfigParser
 import time
-import socket
 from pymongo import MongoClient
 from time import strftime, localtime, time
 
@@ -59,39 +58,25 @@ def checkLANMembers():
 	# Initialize the database
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	db = client['Alfr3d_DB']
-	collection_members = db['devices']
+	collection_members = db['online_members_collection']
 	collection_users = db['users']
 
 	# find out who is online
-	if socket.gethostname() == 'psamathe':
-		os.system("sudo arp-scan --interface=p1p1 --localnet > "+ netclientsfile)	#PSAMATHE
-	else:
-		os.system("sudo arp-scan --localnet > "+ netclientsfile)
+	os.system("sudo arp-scan --interface=p1p1 --localnet > "+ netclientsfile)
 
 	netClients = open(netclientsfile, 'r')
 	netClientsMACs = []
 	netClientsIPs = []
 
 	# Parse MAC and IP addresses
-	if socket.gethostname() == 'psamathe':
-		for line in netClients:
-			ret = line.split('\t')
-			ret2 = ret[0].split('.')
-			if ret2[0] == ('192') and ret2[1] == ('168'):
-				print ret[0]
-				# parse MAC addresses from arp-scan run
-				netClientsMACs.append(ret[1])		
-				# parse IP addresses from arp-scan run
-				netClientsIPs.append(ret[0])
-	else:
-		for line in netClients:
-			ret = line.split('\t')
-			ret2 = ret[0].split('.')
-			if ret2[0] == ('10') and ret2[1] == ('0'):
-				# parse MAC addresses from arp-scan run
-				netClientsMACs.append(ret[1])		
-				# parse IP addresses from arp-scan run
-				netClientsIPs.append(ret[0])
+	for line in netClients:
+		ret = line.split('\t')
+		ret2 = ret[0].split('.')
+		if ret2[0] == ('10') and ret2[1] == ('0'):
+			# parse MAC addresses from arp-scan run
+			netClientsMACs.append(ret[1])		
+			# parse IP addresses from arp-scan run
+			netClientsIPs.append(ret[0])
 
 	netClients2 = {}
 	for i in range(len(netClientsMACs)):
@@ -155,7 +140,6 @@ def checkLANMembers():
 				"MAC":member,
 				"type":"guest",
 				"state":"online",
-				"location":[0,0],
 				"last_online":int(time()),
 				"user":"unknown"}
 			try:
@@ -178,7 +162,7 @@ def updateUsers():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	db = client['Alfr3d_DB']
 	collection_users = db['users']
-	collection_members = db['devices']
+	collection_members = db['online_members_collection']
 
 	for user in collection_users.find():									# go through all users
 		if user['name'] != "unknown":										# those who aren't guests

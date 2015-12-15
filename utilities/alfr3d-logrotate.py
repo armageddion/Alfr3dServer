@@ -36,4 +36,5 @@ for i in ("weatherUtil.log",
 		print "failed to rotate log: %s" %newLog		
 
 # remove old logs
-os.system('find '+os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/')+' -name *.log -mtime +7 -exec rm {} \;')
+#os.system('find '+os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/')+' -name *.log -mtime +7 -exec rm {} \;')
+os.system('find '+os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/')+' *.log -mtime +7 -exec rm {} \;')

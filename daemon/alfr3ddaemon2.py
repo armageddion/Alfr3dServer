@@ -304,6 +304,7 @@ if __name__ == "__main__":
 	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
+			print starting
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
 			daemon.stop()

@@ -39,7 +39,8 @@ import logging
 from bottle import route, run, template, request, redirect
 from time import gmtime, strftime, localtime, sleep, time		# needed to obtain time
 
-sys.path.append('../utilities')
+#sys.path.append('../utilities')
+sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../utilities"))
 import dbUtil
 from userClass import User
 from deviceClass import Device

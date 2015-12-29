@@ -55,6 +55,7 @@ def checkLANMembers():
 	# set up configuration files
 	configFile = (os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../config/alfr3ddaemon.conf'))
 	netclientsfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/netclients.tmp')
+	nethostsfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../log/nethosts.tmp')
 
 	# Initialize the database
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
@@ -71,6 +72,7 @@ def checkLANMembers():
 	netClients = open(netclientsfile, 'r')
 	netClientsMACs = []
 	netClientsIPs = []
+	netClientsHosts = []
 
 	# Parse MAC and IP addresses
 	if socket.gethostname() == 'psamathe':
@@ -92,6 +94,15 @@ def checkLANMembers():
 				netClientsMACs.append(ret[1])		
 				# parse IP addresses from arp-scan run
 				netClientsIPs.append(ret[0])
+
+	# get hostnames
+	for ip in netClientsIps:
+		netClientsHosts.append(os.system("nmap -A "+str(ip)+" | grep 'Computer name:'"))
+		os.system("nmap -A "+str(ip)+" | grep 'Computer name:' >> "+nethostsfile)
+
+	netHosts = open(nethostsfile, 'r')
+	for host in netHosts:
+		print host 			# DEBUG
 
 	netClients2 = {}
 	for i in range(len(netClientsMACs)):
@@ -166,6 +177,9 @@ def checkLANMembers():
 				print "Unexpected error:", sys.exc_info()[0]
 				log.write(strftime("%H:%M:%S: ")+"Traceback: "+ str(e))
 
+	log.write(strftime("%H:%M:%S: ")+"Cleaning up temporary files\n")
+	os.system('rm -rf '+netclientsfile)
+	os.system('rm -rf '+nethostsfile)
 	log.close()
 	updateUsers()
 

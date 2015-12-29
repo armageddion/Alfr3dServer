@@ -95,15 +95,6 @@ def checkLANMembers():
 				# parse IP addresses from arp-scan run
 				netClientsIPs.append(ret[0])
 
-	# get hostnames
-	for ip in netClientsIPs:
-		netClientsHosts.append(os.system("nmap -A "+str(ip)+" | grep 'Computer name:'"))
-		os.system("nmap -A "+str(ip)+" | grep 'Computer name:' >> "+nethostsfile)
-
-	netHosts = open(nethostsfile, 'r')
-	for host in netHosts:
-		print host 			# DEBUG
-
 	netClients2 = {}
 	for i in range(len(netClientsMACs)):
 		netClients2[netClientsMACs[i]] = netClientsIPs[i]
@@ -161,6 +152,14 @@ def checkLANMembers():
 		else:
 			log.write(strftime("%H:%M:%S: ")+"member "+ member + " is not in DB\n")
 			# so, lets add a new member to the DB
+			# get hostnames
+			os.system("nmap -A "+str(netClients2[member])+" | grep 'Computer name:' > "+nethostsfile)
+
+			# netHosts = open(nethostsfile, 'r')
+			# for host in netHosts:
+			# 	if host.startswith('Computer name:'):
+			# 		print host
+
 			new_member = {"name":"unknown",
 				"IP":netClients2[member],
 				"MAC":member,

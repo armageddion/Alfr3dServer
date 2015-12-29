@@ -96,7 +96,7 @@ def checkLANMembers():
 				netClientsIPs.append(ret[0])
 
 	# get hostnames
-	for ip in netClientsIps:
+	for ip in netClientsIPs:
 		netClientsHosts.append(os.system("nmap -A "+str(ip)+" | grep 'Computer name:'"))
 		os.system("nmap -A "+str(ip)+" | grep 'Computer name:' >> "+nethostsfile)
 

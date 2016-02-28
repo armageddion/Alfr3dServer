@@ -43,7 +43,8 @@ class Arduino:
 		Arduino family class, embodying common functionality accross the family
 	"""
 
-	def __init__(self, device="/dev/ttyACM0",baudrate=9600):
+	#def __init__(self, device="/dev/ttyACM0",baudrate=9600):
+	def __init__(self, device="/dev/ttyUSB0",baudrate=9600):
 		"""
 			Class constructor.
 
@@ -74,8 +75,9 @@ class Arduino:
 			time.sleep(5)	# need to wait before doing anything else... Arduino needs time... qq
 			log.write(strftime("%H:%M:%S: ")+"connected\n")
 			return True
-		except:
+		except Exception, e:
 			log.write(strftime("%H:%M:%S: ")+"ERROR: Failed to connect to Arduino\n")
+			print "traceback: "+str(e)
 			return False
 
 	def readline(self):

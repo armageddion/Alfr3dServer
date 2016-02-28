@@ -72,7 +72,7 @@ class Arduino:
 		log.write(strftime("%H:%M:%S: ")+"connecting to Arduino\n")
 		try:
 			self.serial = serial.Serial(self.device, self.baudrate, self.bytesize, self.parity, self.stopbits, self.timeout)
-			time.sleep(5)	# need to wait before doing anything else... Arduino needs time... qq
+			sleep(5)	# need to wait before doing anything else... Arduino needs time... qq
 			log.write(strftime("%H:%M:%S: ")+"connected\n")
 			return True
 		except Exception, e:

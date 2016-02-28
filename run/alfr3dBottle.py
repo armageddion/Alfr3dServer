@@ -94,7 +94,7 @@ def speak(command):
 def arduino(command):
 	log.write(strftime("%H:%M:%S: ")+"Received request: /arduino/"+command)
 	log.write(strftime("%H:%M:%S: ")+"Connecting to Arduino")
-	arduino = utilities.Arduino()
+	arduino = utilities.Arduino(device="/dev/ttyUSB0")
 	arduino.connect()
 
 	arduino.write(command+"\n")

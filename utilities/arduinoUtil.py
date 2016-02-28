@@ -33,7 +33,7 @@ This file is used for all arduino related functions.
 import serial
 import sys
 import os
-from time import strftime
+from time import strftime, sleep
 
 logfile = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../log/arduinoUtil.log")
 log = open(logfile, 'a')

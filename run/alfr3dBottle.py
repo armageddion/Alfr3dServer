@@ -90,6 +90,16 @@ def speak(command):
 
 	return template('<b>Processed request: /speak/{{command}}</b>!',command=command)
 
+@route('/arduino/<command>')
+def arduino(command):
+	log.write(strftime("%H:%M:%S: ")+"Received request: /arduino/"+command)
+	log.write(strftime("%H:%M:%S: ")+"Connecting to Arduino")
+	arduino = utilities.Arduino()
+	arduino.connect()
+
+	arduino.write(command+"\n")
+
+
 @route('/<command>')
 def processCommand(command):
 	log.write(strftime("%H:%M:%S: ")+"Received request:/"+command)
